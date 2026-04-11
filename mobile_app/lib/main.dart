@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'core/theme/colors.dart';
+import 'widgets/main_nav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // TODO: Initialize Firebase once configured via CLI
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+  // Firebase initialization omitted for safety until user adds google-services.json
   runApp(
     const ProviderScope(
       child: FlowTaskApp(),
@@ -15,18 +14,13 @@ void main() async {
   );
 }
 
-// Basic Routing setup
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const Scaffold(
-          body: Center(
-            child: Text('FlowTask Beta: UI Landing'),
-          ),
-        ),
+        builder: (context, state) => const MainNavWrapper(),
       ),
     ],
   );
@@ -42,7 +36,7 @@ class FlowTaskApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'FlowTask',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.dark, // Enforcing dark mode as requested in branding
+      themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,

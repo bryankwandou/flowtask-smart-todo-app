@@ -1,79 +1,149 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/colors.dart';
+import '../providers/auth_provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile & Settings', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Account Settings', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         children: [
-          const Center(
-            child: CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColors.primary,
-              child: Text('NB', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Center(
-            child: Text('Nayr Bryan', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          ),
-          const Center(
-            child: Text('nayr@example.com', style: TextStyle(color: AppColors.textSecondary)),
-          ),
-          const SizedBox(height: 32),
-          // Subscription Status
+          // User Profile Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [AppColors.secondary, Color(0xFF047857)]),
-              borderRadius: BorderRadius.circular(16),
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: Colors.white10),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Flow Intelligence Pro', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-                    SizedBox(height: 4),
-                    Text('Active Lifetime Plan', style: TextStyle(color: Colors.white70)),
-                  ],
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: AppColors.primary,
+                  child: Icon(Icons.person, size: 40, color: Colors.white),
                 ),
-                const Icon(Icons.workspace_premium, color: Colors.white, size: 32),
+                SizedBox(height: 16),
+                Text('Productivity Pro', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text('premium@flowtask.com', style: TextStyle(color: AppColors.textSecondary)),
               ],
             ),
           ),
           const SizedBox(height: 32),
-          _buildSettingsTile(Icons.dark_mode, 'Theme Preferences', 'System Default'),
-          _buildSettingsTile(Icons.timer, 'Focus Timer Settings', '25m Work / 5m Break'),
-          _buildSettingsTile(Icons.notifications_active, 'Smart Reminders', 'Enabled'),
-          const Divider(height: 40, color: Colors.white10),
-          _buildSettingsTile(Icons.privacy_tip, 'Privacy Policy', null),
-          _buildSettingsTile(Icons.description, 'Terms of Service', null),
+
+          _buildSectionHeader('General'),
+          _buildActionTile(Icons.notifications_active_outlined, 'Notifications', 'Manage alerts & reminders'),
+          _buildActionTile(Icons.workspace_premium_outlined, 'Flow Intelligence Pro', 'Manage your subscription'),
+          
           const SizedBox(height: 24),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Log Out', style: TextStyle(color: AppColors.error, fontSize: 16)),
+          _buildSectionHeader('Support & Legal'),
+          _buildActionTile(Icons.privacy_tip_outlined, 'Privacy Policy', 'Read our data handling rules'),
+          _buildActionTile(Icons.description_outlined, 'Terms of Service', 'Application usage terms'),
+          
+          const SizedBox(height: 48),
+          
+          // Sign Out Button
+          ElevatedButton.icon(
+            onPressed: () => authRepository.signOut(),
+            icon: const Icon(Icons.logout),
+            label: const Text('Sign Out'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.surface,
+              foregroundColor: AppColors.textPrimary,
+              side: const BorderSide(color: Colors.white10),
+            ),
+          ),
+          
+          const SizedBox(height: 16),
+
+          /// HARD REQUIREMENT FOR GOOGLE PLAY 2024+
+          /// Account deletion must be prominent and easy to find for apps with login.
+          TextButton.icon(
+            onPressed: () => _confirmAccountDeletion(context, ref),
+            icon: const Icon(Icons.delete_forever_outlined),
+            label: const Text('Delete Account'),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.error,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Deleting your account will permanently remove all your tasks, stats, and profile data from our servers.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppColors.textMuted, fontSize: 12),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSettingsTile(IconData icon, String title, String? subtitle) {
+  void _confirmAccountDeletion(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: const Text('Delete Account?', style: TextStyle(color: AppColors.error)),
+        content: const Text(
+          'This action is irreversible. All your data including 100% of your tasks and productivity analytics will be permanently destroyed.',
+          style: TextStyle(color: AppColors.textPrimary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              // Show a loading snackbar or dialog here
+              try {
+                await ref.read(authRepositoryProvider).deleteAccount();
+                // Success - the auth redirect will handle it
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error during deletion: \$e'), backgroundColor: AppColors.error),
+                  );
+                }
+              }
+            },
+            child: const Text('Yes, Delete Everything', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 12),
+      child: Text(
+        title.toUpperCase(),
+        style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+      ),
+    );
+  }
+
+  Widget _buildActionTile(IconData icon, String title, String subtitle) {
     return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(icon, color: AppColors.textSecondary),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
-      subtitle: subtitle != null ? Text(subtitle, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)) : null,
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: AppColors.surfaceLight, borderRadius: BorderRadius.circular(12)),
+        child: Icon(icon, color: AppColors.primaryLight, size: 20),
+      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+      trailing: const Icon(Icons.chevron_right, size: 20, color: AppColors.textMuted),
       onTap: () {},
     );
   }

@@ -118,7 +118,7 @@ export default function Home() {
           <div>
             <h4 className="font-bold mb-4 text-slate-300">Legal</h4>
             <ul className="space-y-2 text-slate-500">
-              <li><Link href="#" className="hover:text-indigo-400">Privacy Policy</Link></li>
+              <li><Link href="/privacy" className="hover:text-indigo-400">Privacy Policy</Link></li>
               <li><Link href="#" className="hover:text-indigo-400">Terms of Service</Link></li>
               <li><Link href="#" className="hover:text-indigo-400">Data Usage</Link></li>
             </ul>

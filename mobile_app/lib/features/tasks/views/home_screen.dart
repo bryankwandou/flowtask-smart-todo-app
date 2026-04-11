@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/colors.dart';
 import '../../../widgets/shimmer_loading.dart';
 import '../providers/task_provider.dart';
+import '../../../widgets/sheets/task_creation_sheet.dart';
+import '../../focus/views/focus_timer_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -12,25 +14,18 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(taskProvider);
-    
-    // Simulate a brief loading state if tasks list was theoretically empty/fetching
-    // In a real app, you'd watch a 'loading' provider.
     final isLoading = false; 
 
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // Premium Animated App Bar
           SliverAppBar.large(
             expandedHeight: 180,
             stretch: true,
             backgroundColor: AppColors.background,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                'FlowTask',
-                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5),
-              ),
+              title: const Text('FlowTask', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
               centerTitle: false,
               titlePadding: const EdgeInsets.only(left: 24, bottom: 20),
               background: Container(
@@ -96,10 +91,19 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.large(
-        onPressed: () {},
+        onPressed: () => _showAddTaskSheet(context),
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add_rounded, size: 36, color: Colors.white),
       ).animate().scale(delay: 600.ms, duration: 400.ms, curve: Curves.elasticOut),
+    );
+  }
+
+  void _showAddTaskSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const TaskCreationSheet(),
     );
   }
 }
@@ -117,33 +121,24 @@ class _TaskCard extends ConsumerWidget {
       child: GestureDetector(
         onTap: () => ref.read(taskProvider.notifier).toggleTaskStatus(task.id),
         child: AnimatedContainer(
-          duration: 300.ms,
+          duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: isCompleted ? AppColors.surface.withOpacity(0.5) : AppColors.surface,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: isCompleted ? Colors.transparent : Colors.white10,
-              width: 1,
-            ),
+            border: Border.all(color: isCompleted ? Colors.transparent : Colors.white10, width: 1),
           ),
           child: Row(
             children: [
-              // Custom Animated Checkbox
               Container(
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isCompleted ? AppColors.secondary : Colors.transparent,
-                  border: Border.all(
-                    color: isCompleted ? AppColors.secondary : AppColors.textMuted,
-                    width: 2,
-                  ),
+                  border: Border.all(color: isCompleted ? AppColors.secondary : AppColors.textMuted, width: 2),
                 ),
-                child: isCompleted
-                    ? const Icon(Icons.check, size: 20, color: Colors.white)
-                    : null,
+                child: isCompleted ? const Icon(Icons.check, size: 20, color: Colors.white) : null,
               ),
               const SizedBox(width: 20),
               Expanded(
@@ -164,10 +159,7 @@ class _TaskCard extends ConsumerWidget {
                       children: [
                         const Icon(Icons.timer_outlined, size: 14, color: AppColors.textMuted),
                         const SizedBox(width: 4),
-                        Text(
-                          DateFormat('hh:mm a').format(task.deadline),
-                          style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
-                        ),
+                        Text(DateFormat('hh:mm a').format(task.deadline), style: const TextStyle(color: AppColors.textMuted, fontSize: 13)),
                         const SizedBox(width: 16),
                         _PriorityBadge(priority: task.priority),
                       ],
@@ -176,8 +168,10 @@ class _TaskCard extends ConsumerWidget {
                 ),
               ),
               IconButton.filledTonal(
-                onPressed: () {},
-                icon: const Icon(Icons.play_arrow_rounded, color: AppColors.primaryLight),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const FocusTimerScreen()));
+                },
+                icon: const Icon(Icons.play_arrow_rounded, color: AppColors.primaryLight, size: 24),
               ),
             ],
           ),
@@ -208,14 +202,8 @@ class _PriorityBadge extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
-      ),
+      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+      child: Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
     );
   }
 }

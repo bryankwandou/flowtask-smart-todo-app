@@ -1,0 +1,19 @@
+{
+  "@@locale": "id",
+  "appTitle": "FlowTask",
+  "homeTitle": "Tugas",
+  "analyticsTitle": "Analitik",
+  "focusTitle": "Fokus",
+  "profileTitle": "Profil",
+  "addSubtitle": "Apa rencana fokusmu?",
+  "createTask": "Buat Tugas",
+  "emptyState": "Fokusmu sedang jernih.",
+  "searchHint": "Cari tugasmu...",
+  "highPriority": "Tinggi",
+  "medPriority": "Sedang",
+  "lowPriority": "Rendah",
+  "upgradePro": "Beralih ke Pro",
+  "settings": "Pengaturan",
+  "theme": "Tema",
+  "language": "Bahasa"
+}

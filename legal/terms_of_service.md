@@ -1,33 +1,39 @@
 # Terms of Service
 
-**Last Updated:** April 11, 2026
+**Last Updated: April 13, 2026**
+
+Welcome to FlowTask. By accessing or using our application, you agree to be bound by these terms.
 
 ## 1. Acceptance of Terms
-By downloading, accessing, or using FlowTask ("the App"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access or use the App.
+By creating an account, you agree to these Terms and our Privacy Policy. If you do not agree, do not use the App.
 
 ## 2. Description of Service
-FlowTask is a productivity and task management application offering task organization, focus timers, and behavioral analytics. The application operates on a "Freemium" model.
+FlowTask is a productivity intelligence tool providing task management, focus timers, and behavioral analytics.
 
 ## 3. User Accounts
-To use certain features, you must register for an account using Firebase Authentication. You are responsible for safeguarding your password and for any activities or actions under your account.
+*   You must provide accurate information.
+*   You are responsible for maintaining the confidentiality of your account credentials.
+*   We reserve the right to suspend accounts that violate these terms.
 
-## 4. Acceptable Use
-You agree NOT to:
-- Use the App in any way that violates applicable laws or regulations.
-- Interfere with or disrupt the App's backend infrastructure (Firebase servers).
-- Attempt to gain unauthorized access to other user accounts.
-- Reverse engineer or decompile the App.
+## 4. Subscription & Payments (Premium)
+*   FlowTask offers a premium tier with advanced analytics.
+*   Payments are processed via Google Play In-App Purchases.
+*   Subscriptions auto-renew unless canceled 24 hours before the period ends.
 
-## 5. Subscriptions and Payments
-- **Free Tier:** Core features are provided free of charge.
-- **Premium Tier:** Advanced analytics and focus reports require a subscription. Subscriptions are billed through your Play Store account.
-- **Cancellations:** You can cancel premium subscriptions anytime via Google Play Subscriptions settings.
+## 5. Prohibited Conduct
+You agree not to:
+*   Reverse engineer the App.
+*   Use the App for any illegal purposes.
+*   Attempt to bypass any service limitations.
 
-## 6. Termination
-We may terminate or suspend access to your account immediately, without prior notice or liability, for any reason whatsoever, including breach of Terms.
+## 6. Intellectual Property
+All code, branding, and designs are the exclusive property of FlowTask.
 
-## 7. Changes to Terms
-We reserve the right to modify these Terms at any time. Significant changes will be explicitly communicated via in-app notifications.
+## 7. Limitation of Liability
+FlowTask is provided "as is." We are not liable for any productivity loss, data loss, or indirect damages resulting from the use of the service.
 
-## 8. Contact Information
-For legal inquiries, contact legal@flowtaskapp.com.
+## 8. Governing Law
+These terms are governed by the laws of Indonesia.
+
+## 9. Contact
+support@flowtask.app

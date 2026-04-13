@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:confetti/confetti.dart';
+import 'dart:ui';
 import '../../../core/theme/colors.dart';
 import '../providers/focus_provider.dart';
 
@@ -13,18 +15,25 @@ class FocusTimerScreen extends ConsumerStatefulWidget {
   ConsumerState<FocusTimerScreen> createState() => _FocusTimerScreenState();
 }
 
-class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> {
+class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with TickerProviderStateMixin {
   late ConfettiController _confettiController;
+  late AnimationController _pulseController;
+  int _selectedDurationMinutes = 25;
 
   @override
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
     _confettiController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -36,14 +45,23 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> {
     // Trigger confetti on completion
     if (focus.status == FocusState.completed) {
       _confettiController.play();
+      HapticFeedback.vibrate();
     }
 
-    String timerText = _formatTime(focus.remainingSeconds);
+    // Timer UI Text
+    String timerText = focus.status == FocusState.initial 
+        ? '${_selectedDurationMinutes.toString().padLeft(2, '0')}:00' 
+        : _formatTime(focus.remainingSeconds);
+        
+    // Calculate progress correctly
+    double currentProgress = focus.status == FocusState.initial ? 1.0 : focus.progress;
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -51,6 +69,20 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> {
       ),
       body: Stack(
         children: [
+          // Background Glow
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary.withOpacity(0.05),
+              ),
+            ),
+          ),
+          
           Align(
             alignment: Alignment.center,
             child: ConfettiWidget(
@@ -59,97 +91,173 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> {
               colors: const [AppColors.primary, AppColors.secondary, Colors.white],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (focus.currentTaskId != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white10),
-                    ),
-                    child: const Text(
-                      'ACTIVE TASK FOCUS',
-                      style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2),
-                    ),
-                  ).animate().fadeIn().slideY(begin: -0.2, end: 0),
-                
-                const SizedBox(height: 48),
-                
-                CircularPercentIndicator(
-                  radius: 140.0,
-                  lineWidth: 12.0,
-                  percent: focus.progress,
-                  circularStrokeCap: CircularStrokeCap.round,
-                  progressColor: focus.status == FocusState.completed ? AppColors.secondary : AppColors.primary,
-                  backgroundColor: AppColors.surface,
-                  center: Column(
+          
+          Center(
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        timerText,
-                        style: const TextStyle(fontSize: 56, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      Text(
-                        focus.status == FocusState.completed ? 'FINISHED' : 'REMAINING',
-                        style: const TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
-                      ),
+                      if (focus.currentTaskId != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.white10),
+                          ),
+                          child: const Text(
+                            'ACTIVE TASK FOCUS',
+                            style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+                          ),
+                        ).animate().fadeIn().slideY(begin: -0.2, end: 0),
+                      
+                      const SizedBox(height: 48),
+                      
+                      // Pulsing Glow Timer
+                      AnimatedBuilder(
+                        animation: _pulseController,
+                        builder: (context, child) {
+                          final isFocused = focus.status == FocusState.focused;
+                          final pulseValue = isFocused ? _pulseController.value : 0.0;
+                          
+                          return Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.2 * pulseValue),
+                                  blurRadius: 40 * pulseValue,
+                                  spreadRadius: 10 * pulseValue,
+                                ),
+                              ],
+                            ),
+                            child: CircularPercentIndicator(
+                              radius: 140.0,
+                              lineWidth: 12.0,
+                              percent: currentProgress,
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: focus.status == FocusState.completed ? AppColors.secondary : AppColors.primary,
+                              backgroundColor: AppColors.surface,
+                              center: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    timerText,
+                                    style: const TextStyle(fontSize: 56, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                  Text(
+                                    focus.status == FocusState.completed ? 'FINISHED' : (focus.status == FocusState.initial ? 'PRESET' : 'REMAINING'),
+                                    style: const TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                              animation: true,
+                              animateFromLastPercent: true,
+                              animationDuration: 1000,
+                            ),
+                          );
+                        },
+                      ).animate().scale(duration: 800.ms, curve: Curves.elasticOut),
+                      
+                      const SizedBox(height: 48),
+                      
+                      if (focus.status == FocusState.initial)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildPresetChip(15),
+                            const SizedBox(width: 12),
+                            _buildPresetChip(25),
+                            const SizedBox(width: 12),
+                            _buildPresetChip(50),
+                          ],
+                        ).animate().fadeIn(delay: 200.ms),
+
+                      const SizedBox(height: 48),
+                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (focus.status == FocusState.initial || focus.status == FocusState.completed)
+                            _buildLargeButton(
+                              onPressed: () {
+                                HapticFeedback.mediumImpact();
+                                if (focus.status == FocusState.completed) {
+                                  focusNotifier.resetFocus();
+                                } else {
+                                  focusNotifier.startFocus(durationMinutes: _selectedDurationMinutes);
+                                }
+                              },
+                              label: focus.status == FocusState.completed ? 'NEW SESSION' : 'START SESSION',
+                              icon: focus.status == FocusState.completed ? Icons.replay_rounded : Icons.play_arrow_rounded,
+                              color: AppColors.primary,
+                            )
+                          else ...[
+                            _buildControlCircle(
+                              onPressed: () {
+                                HapticFeedback.lightImpact();
+                                focusNotifier.resetFocus();
+                              },
+                              icon: Icons.replay_rounded,
+                              color: AppColors.surface,
+                            ),
+                            const SizedBox(width: 32),
+                            _buildControlCircle(
+                              onPressed: () {
+                                HapticFeedback.heavyImpact();
+                                focus.status == FocusState.focused 
+                                  ? focusNotifier.pauseFocus() 
+                                  : focusNotifier.resumeFocus();
+                              },
+                              icon: focus.status == FocusState.focused ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                              color: AppColors.primary,
+                              isLarge: true,
+                            ),
+                            const SizedBox(width: 32),
+                            _buildControlCircle(
+                              onPressed: () {
+                                HapticFeedback.mediumImpact();
+                                focusNotifier.resetFocus();
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.stop_rounded,
+                              color: AppColors.error.withOpacity(0.2),
+                              iconColor: AppColors.error,
+                            ),
+                          ]
+                        ],
+                      ).animate().fadeIn(delay: 400.ms),
                     ],
                   ),
-                  animation: true,
-                  animateFromLastPercent: true,
-                  animationDuration: 1000,
-                ).animate().scale(duration: 800.ms, curve: Curves.elasticOut),
-                
-                const SizedBox(height: 64),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (focus.status == FocusState.initial || focus.status == FocusState.completed)
-                      _buildLargeButton(
-                        onPressed: () => focusNotifier.startFocus(),
-                        label: 'START SESSION',
-                        icon: Icons.play_arrow_rounded,
-                        color: AppColors.primary,
-                      )
-                    else ...[
-                      _buildControlCircle(
-                        onPressed: () => focusNotifier.resetFocus(),
-                        icon: Icons.replay_rounded,
-                        color: AppColors.surface,
-                      ),
-                      const SizedBox(width: 32),
-                      _buildControlCircle(
-                        onPressed: focus.status == FocusState.focused 
-                          ? () => focusNotifier.pauseFocus() 
-                          : () => focusNotifier.resumeFocus(),
-                        icon: focus.status == FocusState.focused ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                        color: AppColors.primary,
-                        isLarge: true,
-                      ),
-                      const SizedBox(width: 32),
-                      _buildControlCircle(
-                        onPressed: () {
-                          focusNotifier.resetFocus();
-                          Navigator.pop(context);
-                        },
-                        icon: Icons.stop_rounded,
-                        color: AppColors.error.withOpacity(0.2),
-                        iconColor: AppColors.error,
-                      ),
-                    ]
-                  ],
-                ).animate().fadeIn(delay: 400.ms),
-              ],
+                ),
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPresetChip(int minutes) {
+    bool isSelected = _selectedDurationMinutes == minutes;
+    return ChoiceChip(
+      label: Text('$minutes min', style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+      selected: isSelected,
+      onSelected: (selected) {
+        if (selected) {
+          HapticFeedback.selectionClick();
+          setState(() => _selectedDurationMinutes = minutes);
+        }
+      },
+      selectedColor: AppColors.primary.withOpacity(0.2),
+      backgroundColor: AppColors.surface,
+      labelStyle: TextStyle(color: isSelected ? AppColors.primaryLight : AppColors.textMuted),
+      side: BorderSide(color: isSelected ? AppColors.primary : Colors.white10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 
@@ -189,3 +297,4 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }
+

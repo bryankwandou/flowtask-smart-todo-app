@@ -1,30 +1,27 @@
-# Branding System: FlowTask
+# Branding System for FlowTask
 
-## Core Identity
-**Application Name:** FlowTask
-**Tagline:** "Turn your daily chaos into focused progress."
-**Vibe:** Minimalist, Zen, Data-driven, Intelligent, Uncluttered.
+## 1. Logo Concept
+**Concept:** A minimalist circular checkmark symbol representing "flow" and "productivity." The circle should be slightly "open" or "flowing" into the checkmark to symbolize non-stop progress and focus.
 
-## Brand Colors
+### Logo Prompt for AI Generator (e.g., Midjourney, DALL-E)
+> "Minimalist vector logo for a productivity app named 'FlowTask'. A clean, circular open checkmark symbol. Modern, geometric, symmetrical. Primary color: Deep Indigo (#4F46E5), Secondary accent: Vibrant Emerald (#10B981). High contrast, flat design, white background, professional, premium SaaS aesthetic."
 
-- **Primary Accent (`#4F46E5` - Indigo):** Represents intelligence, focus, depth, and technology. Used for primary buttons, active states, and key data points.
-- **Secondary Accent (`#10B981` - Emerald Green):** Represents completion, success, growth, and positive streaks. Used for checkmarks, success states, and positive trend lines in analytics.
-- **Background (Dark Mode Preferred):** `#0F172A` (Slate 900) for deep focus aesthetics.
-- **Surface Panels:** `#1E293B` (Slate 800) for cards and modals.
-- **Text Primary:** `#F8FAFC` (Slate 50)
-- **Text Secondary:** `#94A3B8` (Slate 400)
+## 2. Color Palette
+| Name | Hex | Usage |
+| :--- | :--- | :--- |
+| **Primary (Indigo)** | `#6366F1` | Buttons, headers, active states |
+| **Secondary (Emerald)** | `#10B981` | Completed tasks, success icons, streaks |
+| **Accent (Violet)** | `#8B5CF6` | Productivity IQ, Deep focus mode |
+| **Background (Slate)** | `#0F172A` | Deep navy background for dark mode |
+| **Surface (Slate 800)** | `#1E293B` | Card backgrounds, list items |
 
-## Typography
-- **Primary Font:** `Inter` (Google Fonts)
-  - Clean, incredibly legible at small UI sizes, and possesses a modern tech feel.
-  - Headings: `Inter Bold`
-  - Body: `Inter Regular`
-  - Labels/Tags: `Inter Medium`
+## 3. Typography
+**Font Stack:** Inter, system-ui, -apple-system, sans-serif.
+- **Headings:** Bold, high weight, tracked slightly tight.
+- **Body:** Regular, generous line height for readability.
 
-## Logo Design Prompt
-> **AI Image Generator Prompt:**
-> "A minimalist app icon for a productivity to-do list app named 'FlowTask'. The logo should feature a continuous, smooth geometric line forming a circular checkmark. The line should imply 'flow' and forward momentum. The primary color should be a vibrant Indigo (#4F46E5) with a subtle Emerald Green (#10B981) gradient at the tip of the checkmark. Clean, flat design, modern startup aesthetic, dark background."
-
-## Iconography Pattern
-- **Style:** Line icons, 2px stroke, rounded terminals.
-- **Library Reference:** Lucide Icons / Feather Icons.
+## 4. UI/UX Principles
+- **Glassmorphism:** Use subtle blur effects on cards for a premium feel.
+- **Micro-Animations:** Use Lottie for task completion and focus timer transitions.
+- **White Space:** Generous margins to reduce "task anxiety."
+- **Focus First:** The "Focus Timer" should be the most prominent interactive element.

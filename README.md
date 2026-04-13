@@ -1,131 +1,89 @@
 # FlowTask 🌊
 > **"Turn your daily chaos into focused progress."**
 
-![FlowTask Banner](https://via.placeholder.com/1200x400.png?text=FlowTask+-+Focused+Progress)
+[![License: MIT](https://img.shields.io/badge/License-MIT-indigo.svg)](https://opensource.org/licenses/MIT)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue.svg)](https://flutter.dev)
+[![Firebase](https://img.shields.io/badge/Backend-Firebase-ffca28.svg)](https://firebase.google.com)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-emerald.svg)](https://makeapullrequest.com)
 
-## 📌 Product Description
-FlowTask is a modern, productivity-focused To-Do List mobile application designed to help individuals organize tasks, maintain focus, and track productivity patterns. Unlike traditional task managers that just accumulate lists, FlowTask combines minimal task management, focus tools, and analytics to help users deeply understand and optimize how they work best.
-
-### ❓ The Problem
-Most to-do list applications only allow users to list tasks. They do not help users:
-- Stay focused on deep work.
-- Understand their unique productivity patterns.
-- Maintain consistent daily progress.
-As a result, users accumulate massive lists of unfinished tasks and inevitably lose motivation.
-
-### 💡 The Solution
-FlowTask acts as a **personal productivity intelligence tool**, introducing:
-- **Smart Task Management:** Minimalist, clutter-free task organization.
-- **Focus Mode Timer:** Built-in Pomodoro-style timer tied directly to active tasks.
-- **Productivity Analytics:** Deep insights into completion behaviors.
-- **Completion Streak Tracking:** Gamified daily progress.
-- **Intelligent Reminders:** AI-optimized notification schedules.
-
-## 🔥 Unique Value Proposition
-FlowTask is not just a task list—it is a **personal productivity intelligence tool**. 
-The application analyzes your behavioral task completion patterns and provides actionable insights strictly tailored to you:
-- *What are my most productive hours?*
-- *How consistent is my completion streak?*
-- *Where is my task consistency dropping?*
-
-## 🎯 Target Audience
-**Primary:**
-- Students
-- Freelancers
-- Remote Workers
-
-**Secondary:**
-- Startup Founders
-- Productivity Enthusiasts
+FlowTask is a modern, productivity-focused To-Do List mobile application designed to help individuals organize tasks, maintain deep focus, and track productivity patterns. Unlike traditional task managers, FlowTask combines minimalist task management with **Productivity Intelligence** to help you understand how you work best.
 
 ---
+
+## 🚀 The Vision
+Most to-do list applications only allow users to list tasks. They do not help users:
+- **Stay Focused:** No built-in mechanics for deep work.
+- **Understand Patterns:** No data on *when* or *how* you are most productive.
+- **Maintain Consistency:** No gamified feedback loops for long-term progress.
+
+**FlowTask solves this.** It transforms a passive list into an active intelligence tool.
+
+## ✨ Core Features
+- 🧠 **Smart Task Management:** Minimalist, clutter-free task organization with priority levels.
+- ⏱️ **Deep Focus Engine:** Integrated Pomodoro-style timer tied directly to your tasks.
+- 📊 **Productivity Intelligence:** Behavioral analytics that reveal your most productive hours and completion rates.
+- 🔥 **Streak Control:** Gamified consistency tracking to keep you motivated.
+- 🔔 **Intelligent Reminders:** AI-optimized notification schedules to respect your flow state.
 
 ## 🛠 Tech Stack
+- **Frontend:** Flutter (Latest Stable)
+- **Backend:** Firebase (Authentication, Firestore, Cloud Functions, FCM)
+- **State Management:** Riverpod (Functional & Reactive)
+- **Design:** Modern Glassmorphism & Material 3
+- **Analytics:** Firebase Analytics & Custom Intelligence Engine
 
-### Frontend
-- **Framework:** Flutter (latest stable) for iOS & Android.
-- **State Management:** Riverpod.
-- **Routing:** GoRouter.
-- **UI Architecture:** Clean Architecture principles.
+## 🏗️ System Architecture
+The application follows a clean, layered architecture ensuring scalability and testability.
 
-### Backend
-- **Core:** Firebase
-- **Authentication:** Firebase Auth (Google, Apple, Email).
-- **Database:** Cloud Firestore.
-- **Cloud Functions:** Serverless triggers & cron jobs.
-- **Notifications:** Firebase Cloud Messaging (FCM).
-- **Analytics:** Firebase Analytics & Crashlytics.
-
-### Web & Deployment
-- **Landing Page:** Next.js deployed on Vercel.
-- **Mobile Distribution:** Google Play Store (App Bundle) & Apple App Store.
-
----
-
-## 🏗 Architecture Overview
-**Pattern:** `Mobile Client → Firebase Backend`
-
-```text
-Flutter Application
-       │
-       ▼
-Firebase Authentication  <-- Controls Access
-       │
-       ▼
-Firestore Database       <-- Syncs user tasks, stats, and profile
-       │
-       ▼
-Cloud Functions          <-- Handles backend logic & heavy analytics computation
-       │
-       ▼
-Notification System      <-- Dispatches intelligent reminders via FCM
+```mermaid
+graph LR
+    A[Mobile App] -- Auth --> B[Firebase Auth]
+    A -- Sync --> C[Cloud Firestore]
+    C -- Trigger --> D[Cloud Functions]
+    D -- Analysis --> E[Analytics Engine]
+    E -- Result --> C
+    D -- Alert --> F[FCM Notification]
+    F --> A
 ```
 
----
+## 📦 Project Structure
+```text
+flowtask-smart-todo-app/
+├── mobile_app/         # Full Flutter Application logic
+│   ├── lib/
+│   │   ├── core/       # Theme, utils, and global configs
+│   │   ├── features/   # Feature-based domain logic (Auth, Tasks, Analytics)
+│   │   ├── services/   # Firebase & API integrations
+│   │   └── widgets/    # Reusable UI components
+├── backend/            # Firebase Rules & Cloud Functions
+├── landing_page/       # Next.js promotional website
+├── assets/             # Branding, icons, and animations
+├── docs/               # System architecture & strategy
+└── legal/              # Compliance documents (GP Store Ready)
+```
 
-## 🚀 Installation Steps
+## 💰 Monetization & Growth
+FlowTask operates on a **Freemium** model:
+- **Free:** Core task management & standard Focus Timer.
+- **Premium:** Advanced behavioral heatmaps, Smart Scheduling, and Extended Reports.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/nayrbryanGaming/flowtask-smart-todo-app.git
-   cd flowtask-smart-todo-app/mobile_app
-   ```
+*Check [docs/strategy.md](file:///docs/strategy.md) for the full 10k user acquisition plan.*
 
-2. **Install Flutter Dependencies:**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Configure Firebase:**
-   - Install Firebase CLI and run `flutterfire configure`.
-   - Ensure the generated `firebase_options.dart` is placed in `lib/`.
-
-4. **Run the App:**
-   ```bash
-   flutter run
-   ```
-*(Note: Run strictly on physical devices for optimal focus timer background isolation.)*
-
----
-
-## 🗺 Development Roadmap
-- **Phase 1: Foundation:** Auth, CRUD operations for tasks.
-- **Phase 2: Focus Engine:** Timer integration, strictly scoped notifications.
-- **Phase 3: Intelligence Data:** Streak tracking, charts, weekly insights.
-- **Phase 4: Pro Features:** Smart scheduling, Premium paywall.
+## ⚖️ Legal & Compliance
+FlowTask is fully compliant with modern Google Play Store policies:
+- [Privacy Policy](file:///legal/privacy_policy.md)
+- [Terms of Service](file:///legal/terms_of_service.md)
+- [Data Usage Policy](file:///legal/data_usage_policy.md)
+- [Disclaimer](file:///legal/disclaimer.md)
 
 ---
 
-## 💰 Monetization Strategy
-**Freemium Model:**
-- **Free Tier:** Core task management, basic reminders, standard Focus Timer.
-- **Premium Tier:** Advanced productivity analytics, smart scheduling recommendations, detailed focus reports, multi-device backup.
+## 🤝 Getting Started
+1. **Clone:** `git clone https://github.com/nayrbryanGaming/flowtask-smart-todo-app.git`
+2. **Setup Flutter:** Run `flutter pub get` in `mobile_app/`.
+3. **Configure Firebase:** Add your `google-services.json` to `android/app/`.
+4. **Run:** `flutter run` (Use a physical device for accurate focus timer testing).
 
 ---
-
-## 🥇 Competitive Advantage
-While competitors act as standard digital paper, FlowTask learns from the user. Integrating an analytics engine into task completion transforms a passive chore (listing tasks) into an engaging, data-driven personal growth journey.
-
-## 🤝 Call to Action
-**For Developers:** Interested in redefining productivity? Fork the repository and open a pull request!
-**For Users:** Ready to tame your daily chaos? [Download FlowTask on the App Store](#) or [Get it on Google Play](#).
+Built with ❤️ by the FlowTask Team.
+"Helping you reclaim your time, one task at a time."

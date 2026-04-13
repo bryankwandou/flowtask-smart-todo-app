@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -11,11 +12,24 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+
   @override
   void initState() {
     super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
     _navigateToNext();
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
   }
 
   void _navigateToNext() async {
@@ -23,9 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final onboardingDone = prefs.getBool('onboarding_done') ?? false;
 
-    if (context.mounted) {
+    if (mounted) {
       if (onboardingDone) {
-        context.go('/');
+        context.go('/login');
       } else {
         context.go('/onboarding');
       }
@@ -36,52 +50,138 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+      body: Stack(
+        children: [
+          // Decorative gradient orbs
+          Positioned(
+            top: -100,
+            right: -80,
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    AppColors.primary.withOpacity(0.25),
+                    Colors.transparent,
+                  ],
+                ),
               ),
-              child: const Icon(Icons.check_rounded, size: 60, color: Colors.white),
-            )
-            .animate()
-            .scale(duration: 600.ms, curve: Curves.elasticOut)
-            .shimmer(delay: 800.ms, duration: 1500.ms),
-            
-            const SizedBox(height: 24),
-            
-            const Text(
-              'FlowTask',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.extrabold,
-                color: Colors.white,
-                letterSpacing: -1,
+            ),
+          ),
+          Positioned(
+            bottom: -120,
+            left: -80,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    AppColors.secondary.withOpacity(0.2),
+                    Colors.transparent,
+                  ],
+                ),
               ),
-            )
-            .animate()
-            .fadeIn(delay: 400.ms)
-            .slideY(begin: 0.2, end: 0),
-            
-            const SizedBox(height: 8),
-            
-            const Text(
-              'Focused Progress',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-                letterSpacing: 4,
-              ),
-            )
-            .animate()
-            .fadeIn(delay: 600.ms),
-          ],
-        ),
+            ),
+          ),
+
+          // Core content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Animated Logo Mark
+                AnimatedBuilder(
+                  animation: _pulseController,
+                  builder: (context, child) {
+                    return Container(
+                      width: 110,
+                      height: 110,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [AppColors.primary, Color(0xFF7C3AED)],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(
+                              0.3 + (_pulseController.value * 0.3),
+                            ),
+                            blurRadius: 30 + (_pulseController.value * 20),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: child,
+                    );
+                  },
+                  child: const Icon(
+                    Icons.bolt_rounded,
+                    size: 60,
+                    color: Colors.white,
+                  ),
+                )
+                    .animate()
+                    .scale(duration: 700.ms, curve: Curves.elasticOut)
+                    .fadeIn(duration: 400.ms),
+
+                const SizedBox(height: 32),
+
+                // App Name
+                const Text(
+                  'FlowTask',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: -2,
+                  ),
+                ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.3, end: 0),
+
+                const SizedBox(height: 8),
+
+                const Text(
+                  'FOCUSED PROGRESS',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.primary,
+                    letterSpacing: 5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ).animate().fadeIn(delay: 500.ms),
+
+                const SizedBox(height: 80),
+
+                // Loading indicator
+                SizedBox(
+                  width: 140,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AppColors.surface,
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ).animate().fadeIn(delay: 800.ms),
+              ],
+            ),
+          ),
+
+          // Version tag
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: const Text(
+              'v2.0.0',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+            ).animate().fadeIn(delay: 1000.ms),
+          ),
+        ],
       ),
     );
   }

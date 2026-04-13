@@ -1,5 +1,5 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
 
 final reminderServiceProvider = Provider<ReminderService>((ref) {
   return ReminderService();
@@ -7,18 +7,43 @@ final reminderServiceProvider = Provider<ReminderService>((ref) {
 
 class ReminderService {
   ReminderService() {
-    _initializeFCM();
+    _requestPermissions();
   }
 
-  void _initializeFCM() {
-    // Scaffolded for later integration
-    // FirebaseMessaging.instance.requestPermission();
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  void _requestPermissions() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
   }
 
-  Future<void> scheduleTaskReminder(String taskId, DateTime deadline) async {
-    // 1. Calculate ideal reminder time (e.g., 1 hour before, or optimized to user's focus hour)
-    // 2. Call Cloud Function to queue the FCM push notification
-    print("MOCK: Sent request to queue reminder for task \$taskId to Firebase Functions.");
+  Future<void> scheduleTaskReminder({
+    required String taskId,
+    required String title,
+    required DateTime deadline,
+  }) async {
+    // Schedule 30 minutes before deadline
+    final scheduleTime = deadline.subtract(const Duration(minutes: 30));
+
+    // If scheduled time is in the past, don't schedule
+    if (scheduleTime.isBefore(DateTime.now())) return;
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: taskId.hashCode,
+        channelKey: 'task_reminders',
+        title: 'Upcoming Task: $title',
+        body: 'Your task is due in 30 minutes. Stay focused!',
+        notificationLayout: NotificationLayout.Default,
+        category: NotificationCategory.Reminder,
+        payload: {'taskId': taskId},
+      ),
+      schedule: NotificationCalendar.fromDate(date: scheduleTime),
+    );
+  }
+
+  Future<void> cancelReminder(String taskId) async {
+    await AwesomeNotifications().cancel(taskId.hashCode);
   }
 }

@@ -1,12 +1,15 @@
 {
-  "name": "flowtask-functions",
-  "description": "Firebase Cloud Functions for FlowTask",
+  "name": "flowtask-backend",
+  "version": "1.0.0",
+  "description": "Cloud Functions for FlowTask Productivity Intelligence",
+  "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^11.8.0",
-    "firebase-functions": "^4.3.1"
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^4.5.0",
+    "luxon": "^3.4.4"
   },
   "engines": {
     "node": "18"
   },
-  "main": "index.js"
+  "private": true
 }

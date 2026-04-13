@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
+enum ThemePalette { indigo, emerald, slate }
+
 class AppTheme {
-  static ThemeData get darkTheme {
+  static ThemeData getTheme(ThemePalette palette) {
+    final colors = _getPaletteColors(palette);
+    
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.primary,
+      colorScheme: ColorScheme.dark(
+        primary: colors.primary,
         onPrimary: Colors.white,
-        secondary: AppColors.secondary,
+        secondary: colors.secondary,
         onSecondary: Colors.white,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
@@ -21,7 +25,6 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
       
-      // Modern Typography using Inter
       textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.extrabold, color: AppColors.textPrimary, letterSpacing: -1.5),
         displayMedium: GoogleFonts.inter(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -1.0),
@@ -33,7 +36,6 @@ class AppTheme {
         bodyMedium: GoogleFonts.inter(fontSize: 14, color: AppColors.textSecondary, height: 1.5),
       ),
 
-      // Input Decoration (Modern Slate Style)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
@@ -49,11 +51,10 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderSide: BorderSide(color: colors.primary, width: 2),
         ),
       ),
 
-      // Card Theme (Elevated Slate)
       cardTheme: CardTheme(
         color: AppColors.surface,
         elevation: 0,
@@ -63,10 +64,9 @@ class AppTheme {
         ),
       ),
 
-      // Button Themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: colors.primary,
           foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 60),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -75,15 +75,31 @@ class AppTheme {
         ),
       ),
 
-      // Bottom Navigation Bar
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.background,
         elevation: 0,
-        selectedItemColor: AppColors.primary,
+        selectedItemColor: colors.primary,
         unselectedItemColor: AppColors.textSecondary,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         type: BottomNavigationBarType.fixed,
       ),
     );
   }
+
+  static _PaletteColors _getPaletteColors(ThemePalette palette) {
+    switch (palette) {
+      case ThemePalette.indigo:
+        return const _PaletteColors(primary: Color(0xFF6366F1), secondary: Color(0xFF10B981));
+      case ThemePalette.emerald:
+        return const _PaletteColors(primary: Color(0xFF10B981), secondary: Color(0xFF6366F1));
+      case ThemePalette.slate:
+        return const _PaletteColors(primary: Color(0xFF94A3B8), secondary: Color(0xFF6366F1));
+    }
+  }
+}
+
+class _PaletteColors {
+  final Color primary;
+  final Color secondary;
+  const _PaletteColors({required this.primary, required this.secondary});
 }

@@ -121,7 +121,14 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('CREATE TASK'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 0,
+              ),
+              child: const Text('CREATE TASK', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
             ),
           ],
         ),

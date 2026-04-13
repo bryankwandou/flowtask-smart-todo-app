@@ -1,0 +1,22 @@
+{
+  "@@locale": "en",
+  "appTitle": "FlowTask",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "homeTitle": "Tasks",
+  "analyticsTitle": "Analytics",
+  "focusTitle": "Focus",
+  "profileTitle": "Profile",
+  "addSubtitle": "What's in your flow?",
+  "createTask": "Create Task",
+  "emptyState": "Your flow is clear.",
+  "searchHint": "Search your flow...",
+  "highPriority": "High",
+  "medPriority": "Med",
+  "lowPriority": "Low",
+  "upgradePro": "Upgrade to Pro",
+  "settings": "Settings",
+  "theme": "Theme",
+  "language": "Language"
+}

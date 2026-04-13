@@ -1,14 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
 import 'package:uuid/uuid.dart';
+import '../../reminders/services/reminder_service.dart';
 
 final taskProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
-  return TaskNotifier();
+  return TaskNotifier(ref);
 });
 
 class TaskNotifier extends StateNotifier<List<Task>> {
-  TaskNotifier() : super([]) {
-    _loadMockData(); // Initial offline state before Firebase connection
+  final Ref _ref;
+  TaskNotifier(this._ref) : super([]) {
+    _loadMockData(); 
   }
 
   void _loadMockData() {
@@ -46,6 +47,11 @@ class TaskNotifier extends StateNotifier<List<Task>> {
       createdAt: DateTime.now(),
     );
     state = [...state, newTask];
+    _ref.read(reminderServiceProvider).scheduleTaskReminder(
+      taskId: newTask.id,
+      title: newTask.title,
+      deadline: deadline,
+    );
   }
 
   void toggleTaskStatus(String id) {
@@ -62,6 +68,7 @@ class TaskNotifier extends StateNotifier<List<Task>> {
   }
 
   void deleteTask(String id) {
+    _ref.read(reminderServiceProvider).cancelReminder(id);
     state = state.where((task) => task.id != id).toList();
   }
 }

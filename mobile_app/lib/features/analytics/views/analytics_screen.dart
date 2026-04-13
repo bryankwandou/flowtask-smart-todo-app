@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
+import '../providers/analytics_provider.dart';
 
-class AnalyticsScreen extends StatelessWidget {
+class AnalyticsScreen extends ConsumerWidget {
   const AnalyticsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stats = ref.watch(analyticsProvider);
+
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -24,20 +28,20 @@ class AnalyticsScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 12),
                   // Intelligence Score Bar
-                  _buildIQHeader(),
+                  _buildIQHeader(stats.currentStreak),
                   const SizedBox(height: 32),
 
                   _buildSectionTitle('Weekly Performance'),
                   const SizedBox(height: 16),
-                  _buildWeeklyChart(),
+                  _buildWeeklyChart(stats.weeklyVelocity),
                   
                   const SizedBox(height: 32),
                   _buildSectionTitle('Cognitive Focus Patterns'),
                   const SizedBox(height: 16),
-                  _buildPatternsGrid(),
+                  _buildPatternsGrid(stats),
                   
                   const SizedBox(height: 32),
-                  _buildProductivityInsightCard(),
+                  _buildProductivityInsightCard(stats.peakHour),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -48,7 +52,7 @@ class AnalyticsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildIQHeader() {
+  Widget _buildIQHeader(int streak) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -67,10 +71,10 @@ class AnalyticsScreen extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('Current Streak', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Text('08 Days', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.extrabold)),
+            children: [
+              const Text('Current Streak', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text('${streak.toString().padLeft(2, '0')} Days', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.extrabold)),
             ],
           ),
           Container(
@@ -83,7 +87,7 @@ class AnalyticsScreen extends StatelessWidget {
     ).animate().slideY(begin: 0.2, end: 0, duration: 600.ms, curve: Curves.easeOutQuart).fadeIn();
   }
 
-  Widget _buildWeeklyChart() {
+  Widget _buildWeeklyChart(List<double> velocity) {
     return Container(
       height: 240,
       padding: const EdgeInsets.all(24),
@@ -116,15 +120,7 @@ class AnalyticsScreen extends StatelessWidget {
           borderData: FlBorderData(show: false),
           lineBarsData: [
             LineChartBarData(
-              spots: [
-                const FlSpot(0, 3),
-                const FlSpot(1, 1),
-                const FlSpot(2, 4),
-                const FlSpot(3, 2),
-                const FlSpot(4, 5),
-                const FlSpot(5, 3),
-                const FlSpot(6, 4),
-              ],
+              spots: velocity.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
               isCurved: true,
               color: AppColors.primary,
               barWidth: 4,
@@ -145,21 +141,82 @@ class AnalyticsScreen extends StatelessWidget {
     ).animate().fadeIn(delay: 200.ms, duration: 800.ms);
   }
 
-  Widget _buildPatternsGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      childAspectRatio: 1.4,
+  Widget _buildPatternsGrid(dynamic stats) {
+    return Column(
       children: [
-        _buildPatternTile('Peak Hour', '10:00 AM', Icons.wb_sunny_outlined),
-        _buildPatternTile('Completion', '84%', Icons.check_circle_outline),
-        _buildPatternTile('Focus Time', '24.5h', Icons.timer_outlined),
-        _buildPatternTile('Deep Work', '12 Sessions', Icons.psychology_outlined),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1.4,
+          children: [
+            _buildStatCard('Total Tasks', stats.totalTasks.toString(), Icons.check_circle_outline, AppColors.primary),
+            _buildStatCard('Current Streak', '${stats.currentStreak} Days', Icons.local_fire_department_rounded, AppColors.warning),
+            _buildStatCard('Completion', '${(stats.completionRate * 100).toInt()}%', Icons.pie_chart_outline_rounded, AppColors.secondary),
+            _buildStatCard('Peak Hour', stats.peakHour, Icons.access_time_rounded, AppColors.primaryLight),
+          ],
+        ).animate().fadeIn(delay: 400.ms),
+
+        const SizedBox(height: 32),
+
+        // Intelligence Tip Card
+        Consumer(
+          builder: (context, ref, child) {
+            final tip = ref.watch(smartTipsProvider);
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColors.primary.withOpacity(0.1), AppColors.secondary.withOpacity(0.05)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.psychology_outlined, color: AppColors.primaryLight, size: 32),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('INTELLIGENCE TIP', style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                        const SizedBox(height: 4),
+                        Text(tip, style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.4)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ).animate().shimmer(duration: 2.seconds, color: Colors.white10).fadeIn(delay: 500.ms);
+          },
+        ),
       ],
-    ).animate().slideY(begin: 0.1, end: 0, delay: 400.ms);
+    );
+  }
+
+  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: color, size: 18),
+          const Spacer(),
+          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+        ],
+      ),
+    ).animate().shimmer(duration: 2.seconds, color: Colors.white10);
   }
 
   Widget _buildPatternTile(String label, String value, IconData icon) {
@@ -182,7 +239,7 @@ class AnalyticsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProductivityInsightCard() {
+  Widget _buildProductivityInsightCard(String peakHour) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -202,7 +259,7 @@ class AnalyticsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Your productivity peaks in the late morning. Schedule your high-priority "Deep Work" tasks between 10 AM and 12 PM for 30% higher efficiency.',
+            'Your productivity typically peaks around $peakHour. Schedule your high-priority "Deep Work" tasks during this window for 30% higher efficiency.',
             style: TextStyle(color: AppColors.textPrimary.withOpacity(0.8), height: 1.5),
           ),
         ],

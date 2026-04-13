@@ -1,70 +1,54 @@
-# System Architecture & Technical Flow
+# System Architecture: FlowTask
 
-This document details the FlowTask architectural decisions and data flow logic.
+FlowTask is built on a **Serverless Mobile-First Architecture**, leveraging the full power of the Google Firebase ecosystem to ensure low latency, high scalability, and robust security.
 
-## 1. Overall Architectural Model
-**Client-Server Serverless Architecture**
-- **Client:** Flutter Mobile Application (iOS/Android).
-- **Backend:** Firebase (BaaS) providing Auth, Firestore, Cloud Functions.
+## 1. Technical Stack
+- **Frontend:** Flutter (v3.19+) using the **Riverpod 2.0** state management system for functional reactive programming.
+- **Backend-as-a-Service (BaaS):** Google Firebase.
+- **State Management:** Functional Flutter + Riverpod (Notifiers & AsyncValues).
+- **Persistence:** Cloud Firestore (Remote) + Hive (Local Cache).
 
-## 2. Structural Layers (Clean Architecture in Flutter)
+## 2. Component Diagram
 
-The `mobile_app/lib` directory is divided into domain-specific features rather than technical layers:
-```text
-lib/
- ├─ core/       # App-wide UI themes, constants, routing configuration.
- ├─ features/   # Divided by logical domain (auth, tasks, focus, analytics).
- ├─ services/   # Firebase interceptors, local database (Hive) wrappers.
- └─ widgets/    # Dumb, reusable app-wide UI components.
+```mermaid
+graph TD
+    User([User]) <--> Flutter[Flutter Mobile App]
+    
+    subgraph "Firebase Cloud Infrastructure"
+        Flutter <--> Auth[Firebase Authentication]
+        Flutter <--> Firestore[Cloud Firestore]
+        Firestore <--> Functions[Cloud Functions]
+        Functions --> FCM[Firebase Cloud Messaging]
+        FCM --> Flutter
+        Flutter --> Analytics[Firebase Analytics]
+    end
+    
+    subgraph "External Integration"
+        Functions --> Intelligence[Productivity Analysis Engine]
+        Intelligence --> Firestore
+    end
 ```
-*Why this approach?* It allows features (like the focus timer and tasks) to evolve independently and scale safely as the codebase grows.
 
-## 3. Database Schema Design (Firestore)
+## 3. Data Flow Architecture
 
-### `users` Collection
-- Document ID: `uid` (from Firebase Auth)
-- Fields:
-  - `email` (string)
-  - `displayName` (string)
-  - `createdAt` (timestamp)
-  - `subscriptionType` (string: "free" | "premium")
-  - `timezone` (string)
+### 3.1 Task Synchronization
+1.  **Creation:** When a user creates a task, it is first saved locally (Hive) for instant UI feedback and simultaneously pushed to **Cloud Firestore**.
+2.  **Conflict Resolution:** Firestore's real-time listeners ensure that if the user logs in from another device, the state remains consistent.
 
-### `tasks` Collection
-- Document ID: Auto-generated
-- Fields:
-  - `taskId` (string)
-  - `userId` (string, indexed for querying)
-  - `title` (string)
-  - `description` (string)
-  - `priority` (integer: 1-low, 2-medium, 3-high)
-  - `status` (string: "pending", "in_progress", "completed")
-  - `deadline` (timestamp)
-  - `createdAt` (timestamp)
-  - `completedAt` (timestamp, nullable)
+### 3.2 Productivity Intelligence Cycle
+1.  **Collection:** Every task completion event is logged in **Firebase Analytics** with custom parameters (time of day, priority, focus duration).
+2.  **Analysis:** A daily **Cloud Function** trigger sweeps the `tasks` and `analytics` collections to generate a "Productivity Intelligence Object" for the user.
+3.  **Consumption:** The mobile client fetches this object to render high-fidelity charts using **FL Chart**.
 
-### `productivity_stats` Collection
-*(Calculated offline or via Cloud Functions on task completion events)*
-- Document ID: `userId`
-- Fields:
-  - `totalTasksCompleted` (integer)
-  - `currentDailyStreak` (integer)
-  - `longestStreak` (integer)
-  - `mostProductiveHour` (integer: 0-23)
-  - `weeklyCompletionRate` (float/percentage)
+### 3.3 Deep Focus Engine
+1.  **State Persistence:** The Focus Timer state is managed via a specialized Riverpod Notifier. 
+2.  **Background Stability:** To prevent the OS from killing the focus process, a **Foreground Service** (Android) and **Background Tasks** (iOS) are used to maintain the countdown.
 
-## 4. Logical Data Flow & State Management
+## 4. Security & Compliance
+- **Authentication:** OAuth 2.0 via Firebase Auth with mandatory MFA support.
+- **Data Privacy:** Firestore Security Rules ensure that users can only read/write their own `user_id` paths.
+- **Deletion Protocol:** A single `deleteAccount()` call triggers a cascaded purge across Auth, Firestore, and Analytics to satisfy Google Play Store data safety requirements.
 
-**State Management Engine:** Riverpod (`flutter_riverpod`).
-- We use Riverpod to inject dependencies (like Firestore repositories) into the UI seamlessly.
-
-**Data Flow (Task Creation):**
-1. **User Action:** Submits "New Task" form in Flutter UI.
-2. **State Layer:** `TaskNotifier` validates data.
-3. **Repository Layer:** `TaskRepository.createTask()` maps Dart objects to JSON.
-4. **Network Layer:** Firebase SDK sends payload to `Firestore`.
-5. **UI Update:** Firestore stream instantly updates the UI via Riverpod `.watch()`.
-
-## 5. Background Operations & Notifications
-- **Local:** Built-in Focus Timer uses `flutter_background_service` and standard isolated timers.
-- **Remote:** Firebase Cloud Messaging (FCM) is triggered via Firebase Functions to remind users of due dates 1 hour before expiration.
+---
+**FlowTask Engineering Team**
+*Architected for Flow.*

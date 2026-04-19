@@ -79,7 +79,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
             
             const SizedBox(height: 48),
             
-            if (!settings.isPremium)
+            if (!settings.isFounderPass)
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(

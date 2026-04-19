@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:equatable/equatable.dart';
-import '../core/theme/app_theme.dart';
+import '../theme/app_theme.dart';
 
 class SettingsState extends Equatable {
   final ThemePalette palette;

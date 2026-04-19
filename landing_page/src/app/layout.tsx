@@ -1,9 +1,10 @@
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
   subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FlowTask | Focused Progress",
     description: "Personal productivity intelligence tool for students, freelancers, and remote workers.",
-    url: "https://flowtaskapp.com",
+    url: "https://flowtask-smart-todo-app.vercel.app",
     siteName: "FlowTask",
     images: [
       {
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

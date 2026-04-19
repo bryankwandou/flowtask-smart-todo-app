@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/colors.dart';
 import '../../../services/auth_service.dart';
 
@@ -26,13 +28,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _handleRegister() async {
+    if (_emailController.text.isEmpty || _passController.text.isEmpty || _nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    if (_passController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password must be at least 6 characters')),
+      );
+      return;
+    }
+
     HapticFeedback.lightImpact();
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 2));
-    await AuthService.login(_emailController.text);
-    setState(() => _isLoading = false);
-    if (mounted) {
-      context.go('/');
+    
+    try {
+      await AuthService.register(
+        _emailController.text, 
+        _passController.text,
+      );
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not open $url')));
+      }
     }
   }
 
@@ -136,10 +175,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ).animate().slideY(begin: 0.1, end: 0, delay: 200.ms).fadeIn(),
               
               const SizedBox(height: 24),
-              const Text(
-                'By registering, you agree to our Terms of Service and Privacy Policy.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+              GestureDetector(
+                onTap: () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy'),
+                child: const Text(
+                  'By registering, you agree to our Terms of Service and Privacy Policy.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline),
+                ),
               ).animate().fadeIn(delay: 400.ms),
             ],
           ),

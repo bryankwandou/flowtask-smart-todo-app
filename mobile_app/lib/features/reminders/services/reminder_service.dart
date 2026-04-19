@@ -6,16 +6,13 @@ final reminderServiceProvider = Provider<ReminderService>((ref) {
 });
 
 class ReminderService {
-  ReminderService() {
-    _requestPermissions();
-  }
+  ReminderService();
 
-  void _requestPermissions() {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
+  Future<void> requestPermissions() async {
+    final bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
   }
 
   Future<void> scheduleTaskReminder({
@@ -45,5 +42,9 @@ class ReminderService {
 
   Future<void> cancelReminder(String taskId) async {
     await AwesomeNotifications().cancel(taskId.hashCode);
+  }
+
+  Future<void> cancelAllReminders() async {
+    await AwesomeNotifications().cancelAll();
   }
 }

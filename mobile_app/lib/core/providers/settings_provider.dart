@@ -1,35 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:equatable/equatable.dart';
 import '../core/theme/app_theme.dart';
 
-class SettingsState {
+class SettingsState extends Equatable {
   final ThemePalette palette;
   final Locale locale;
+  final bool notificationsEnabled;
+  final bool isFounderPass;
 
-  SettingsState({required this.palette, required this.locale});
+  const SettingsState({
+    this.palette = ThemePalette.indigo,
+    this.locale = const Locale('en'),
+    this.notificationsEnabled = true,
+    this.isFounderPass = false,
+  });
 
-  SettingsState copyWith({ThemePalette? palette, Locale? locale}) {
+  SettingsState copyWith({
+    ThemePalette? palette,
+    Locale? locale,
+    bool? notificationsEnabled,
+    bool? isFounderPass,
+  }) {
     return SettingsState(
       palette: palette ?? this.palette,
       locale: locale ?? this.locale,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+      isFounderPass: isFounderPass ?? this.isFounderPass,
     );
   }
+
+  @override
+  List<Object?> get props => [palette, locale, notificationsEnabled, isFounderPass];
 }
 
 class SettingsNotifier extends StateNotifier<SettingsState> {
-  SettingsNotifier() : super(SettingsState(palette: ThemePalette.indigo, locale: const Locale('en'))) {
+  static const String _founderKey = 'is_founder_pass';
+
+  SettingsNotifier() : super(const SettingsState()) {
     _loadSettings();
   }
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final paletteIndex = prefs.getInt('theme_palette') ?? 0;
-    final languageCode = prefs.getString('language_code') ?? 'en';
+    final localeCode = prefs.getString('language_code') ?? 'en';
+    final notifications = prefs.getBool('notifications_enabled') ?? true;
+    final founder = prefs.getBool(_founderKey) ?? false;
     
     state = SettingsState(
       palette: ThemePalette.values[paletteIndex],
-      locale: Locale(languageCode),
+      locale: Locale(localeCode),
+      notificationsEnabled: notifications,
+      isFounderPass: founder,
     );
   }
 
@@ -43,6 +67,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language_code', locale.languageCode);
     state = state.copyWith(locale: locale);
+  }
+
+  Future<void> setFounderPass(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_founderKey, value);
+    state = state.copyWith(isFounderPass: value);
+  }
+
+  Future<void> setNotifications(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notifications_enabled', value);
+    state = state.copyWith(notificationsEnabled: value);
   }
 }
 

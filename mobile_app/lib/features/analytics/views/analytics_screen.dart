@@ -88,54 +88,56 @@ class AnalyticsScreen extends ConsumerWidget {
   }
 
   Widget _buildWeeklyChart(List<double> velocity) {
-    return Container(
-      height: 240,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: LineChart(
-        LineChartData(
-          gridData: const FlGridData(show: false),
-          titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (val, _) {
-                  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-                  if (val.toInt() >= 0 && val.toInt() < 7) {
-                    return Text(days[val.toInt()], style: const TextStyle(color: AppColors.textMuted, fontSize: 12));
-                  }
-                  return const Text('');
-                },
-              ),
-            ),
-            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          ),
-          borderData: FlBorderData(show: false),
-          lineBarsData: [
-            LineChartBarData(
-              spots: velocity.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
-              isCurved: true,
-              color: AppColors.primary,
-              barWidth: 4,
-              isStrokeCapRound: true,
-              dotData: const FlDotData(show: false),
-              belowBarData: BarAreaData(
-                show: true,
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [AppColors.primary.withOpacity(0.2), Colors.transparent],
+    return RepaintBoundary(
+      child: Container(
+        height: 240,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: LineChart(
+          LineChartData(
+            gridData: const FlGridData(show: false),
+            titlesData: FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (val, _) {
+                    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                    if (val.toInt() >= 0 && val.toInt() < 7) {
+                      return Text(days[val.toInt()], style: const TextStyle(color: AppColors.textMuted, fontSize: 12));
+                    }
+                    return const Text('');
+                  },
                 ),
               ),
+              leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             ),
-          ],
+            borderData: FlBorderData(show: false),
+            lineBarsData: [
+              LineChartBarData(
+                spots: velocity.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
+                isCurved: true,
+                color: AppColors.primary,
+                barWidth: 4,
+                isStrokeCapRound: true,
+                dotData: const FlDotData(show: false),
+                belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.primary.withOpacity(0.2), Colors.transparent],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ).animate().fadeIn(delay: 200.ms, duration: 800.ms);

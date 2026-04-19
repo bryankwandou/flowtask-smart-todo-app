@@ -119,8 +119,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: PageView.builder(
                     controller: _controller,
                     itemCount: _pages.length,
-                    onPageChanged: (index) =>
-                        setState(() => _currentIndex = index),
+                    onPageChanged: (index) {
+                      HapticFeedback.lightImpact();
+                      setState(() => _currentIndex = index);
+                    },
                     itemBuilder: (context, index) =>
                         _OnboardingPageWidget(page: _pages[index]),
                   ),
@@ -222,6 +224,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _finishOnboarding(BuildContext context) async {
+    HapticFeedback.lightImpact();
     await AuthService.markOnboardingDone();
     if (mounted) {
       context.go('/permission-priming');
@@ -241,23 +244,20 @@ class _OnboardingPageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Lottie Hero
+          // High-Tier Native Animation (Zero Network Dependency)
           SizedBox(
             height: 280,
-            child: Lottie.network(
-              page.lottieUrl,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: page.accentColor.withOpacity(0.1),
-                ),
-                child: Icon(Icons.auto_awesome_rounded, size: 80, color: page.accentColor),
-              ),
-            ),
-          ).animate().scale(duration: 600.ms, curve: Curves.easeOutCubic).fadeIn(),
+            child: Icon(
+              page.tag.contains('TASK') ? Icons.task_alt_rounded :
+              page.tag.contains('FOCUS') ? Icons.timer_outlined : Icons.insights_rounded,
+              size: 160,
+              color: page.accentColor.withOpacity(0.8),
+            )
+            .animate(onPlay: (controller) => controller.repeat(reverse: true))
+            .scale(duration: 2.seconds, begin: const Offset(0.9, 0.9), end: const Offset(1.1, 1.1), curve: Curves.easeInOutQuad)
+            .rotate(begin: -0.05, end: 0.05)
+            .shimmer(duration: 3.seconds, color: Colors.white24),
+          ).animate().fadeIn(),
 
           const SizedBox(height: 48),
 

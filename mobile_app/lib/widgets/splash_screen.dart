@@ -117,14 +117,12 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: child,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Image.asset('assets/images/logo.png'),
+                      ),
                     );
                   },
-                  child: const Icon(
-                    Icons.bolt_rounded,
-                    size: 60,
-                    color: Colors.white,
-                  ),
                 )
                     .animate()
                     .scale(duration: 700.ms, curve: Curves.elasticOut)
@@ -176,7 +174,7 @@ class _SplashScreenState extends State<SplashScreen>
             left: 0,
             right: 0,
             child: const Text(
-              'v2.0.0',
+              'v1.0.9+28',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textMuted, fontSize: 12),
             ).animate().fadeIn(delay: 1000.ms),

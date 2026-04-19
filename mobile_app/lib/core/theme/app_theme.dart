@@ -25,42 +25,42 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
       
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
-        displayLarge: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.extrabold, color: AppColors.textPrimary, letterSpacing: -1.5),
-        displayMedium: GoogleFonts.inter(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -1.0),
-        displaySmall: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -0.5),
-        headlineMedium: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-        titleLarge: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-        labelLarge: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-        bodyLarge: GoogleFonts.inter(fontSize: 16, color: AppColors.textPrimary, height: 1.5),
-        bodyMedium: GoogleFonts.inter(fontSize: 14, color: AppColors.textSecondary, height: 1.5),
+      textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme).copyWith(
+        displayLarge: GoogleFonts.outfit(fontSize: 56, fontWeight: FontWeight.extrabold, color: AppColors.textPrimary, letterSpacing: -1.5),
+        displayMedium: GoogleFonts.outfit(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -1.0),
+        displaySmall: GoogleFonts.outfit(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -0.5),
+        headlineMedium: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        titleLarge: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+        labelLarge: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+        bodyLarge: GoogleFonts.outfit(fontSize: 16, color: AppColors.textPrimary, height: 1.5),
+        bodyMedium: GoogleFonts.outfit(fontSize: 14, color: AppColors.textSecondary, height: 1.5),
       ),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Colors.white.withOpacity(0.03),
         hintStyle: const TextStyle(color: AppColors.textMuted),
         contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: colors.primary, width: 2),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: colors.primary, width: 1.5),
         ),
       ),
 
       cardTheme: CardTheme(
-        color: AppColors.surface,
+        color: Colors.white.withOpacity(0.02),
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: Colors.white10, width: 1),
+          borderRadius: BorderRadius.circular(28),
+          side: BorderSide(color: Colors.white.withOpacity(0.08), width: 1),
         ),
       ),
 
@@ -70,7 +70,7 @@ class AppTheme {
           foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 60),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          textStyle: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+          textStyle: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold),
           elevation: 0,
         ),
       ),

@@ -32,7 +32,16 @@ export default function PrivacyPage() {
               By using FlowTask, you agree to the collection and use of information in accordance with this policy.
             </p>
 
-            <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Data We Collect</h2>
+            <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Data Safety (Google Play Compliance)</h2>
+            <div className="bg-emerald-950/20 border border-emerald-900/30 rounded-2xl p-6 mb-6">
+              <ul className="list-disc pl-6 space-y-2 text-slate-300">
+                <li><strong>Data Collection:</strong> We collect minimal personal data (Email) and anonymized usage patterns.</li>
+                <li><strong>Data Usage:</strong> Your data is used strictly for authentication and productivity synchronization.</li>
+                <li><strong>Data Deletion:</strong> We provide a self-service way to permanently and instantly delete your account and all associated data within the app.</li>
+              </ul>
+            </div>
+
+            <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Data We Collect</h2>
             <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 mb-6">
               <h3 className="text-lg font-semibold text-indigo-400 mb-3">Directly Provided Data:</h3>
               <ul className="list-disc pl-6 space-y-2 text-slate-300">

@@ -11,6 +11,8 @@ import '../providers/task_provider.dart';
 import '../../../widgets/sheets/task_creation_sheet.dart';
 import '../../focus/views/focus_timer_screen.dart';
 import 'package:go_router/go_router.dart';
+import '../../analytics/providers/analytics_provider.dart';
+import '../models/task_model.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final allTasks = ref.watch(taskProvider);
-    final isLoading = false; 
+    final isLoading = allTasks.isEmpty && !ref.watch(taskProvider.notifier).mounted; // Improved loading heuristic
 
     // Apply filtering and search
     final tasks = allTasks.where((t) {
@@ -75,30 +77,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Container(
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                             colors: [AppColors.primaryDark, AppColors.background],
                           ),
                         ),
                       ),
-                      Opacity(
-                        opacity: 0.1,
-                        child: Image.network(
-                          'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&q=80&w=1000',
-                          fit: BoxFit.cover,
-                        ),
+                      Positioned(
+                        top: -50,
+                        right: -50,
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary.withOpacity(0.1),
+                          ),
+                        ).animate().scale(duration: 2.seconds, curve: Curves.easeInOut),
                       ),
                       Positioned(
                         bottom: 70,
                         left: 24,
                         right: 24,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildIQStat('TODAY', '${tasks.where((t) => t.status == 'completed').length}/${allTasks.length}'),
-                            _buildIQStat('FOCUS IQ', '82%'),
-                            _buildIQStat('VELOCITY', '⚡ High'),
-                          ],
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final stats = ref.watch(analyticsProvider);
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildIQStat('TODAY', '${tasks.where((t) => t.status == 'completed').length}/${allTasks.length}'),
+                                _buildIQStat('FLOW IQ', '${(stats.completionRate * 100).toInt()}%'),
+                                _buildIQStat('STREAK', '${stats.currentStreak}D'),
+                              ],
+                            );
+                          },
                         ),
                       ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, end: 0),
                       Positioned(
@@ -129,7 +141,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 16),
                     child: IconButton.filledTonal(
-                      onPressed: () {},
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Focus Defense Active: Notifications are optimized for flow.'),
+                            backgroundColor: AppColors.primary,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.notifications_none_rounded, color: AppColors.primaryLight),
                     ),
                   ),
@@ -164,22 +186,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Lottie.network(
-                          'https://assets10.lottiefiles.com/packages/lf20_dmw3t0vg.json',
-                          height: 200,
-                          repeat: true,
-                        ),
-                        const SizedBox(height: 16),
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.05),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.auto_awesome_rounded, size: 64, color: AppColors.primaryLight),
+                        ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+                         .scale(duration: 2.seconds, begin: const Offset(0.9, 0.9), end: const Offset(1.1, 1.1), curve: Curves.easeInOutQuad)
+                         .shimmer(duration: 3.seconds, color: Colors.white10),
+                        const SizedBox(height: 32),
                         Text(
-                          _searchQuery.isEmpty ? 'Your flow is clear.' : 'No matches found.',
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 18, fontWeight: FontWeight.bold)
+                          _searchQuery.isEmpty ? 'The Flow Is Clear' : 'No Resonant Tasks',
+                          style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: -0.5)
                         ),
+                        const SizedBox(height: 8),
                         Text(
-                          _searchQuery.isEmpty ? 'Tap + to start capture your productivity.' : 'Try adjusting your filters.',
+                          _searchQuery.isEmpty ? 'Tap the pulse button to capture your next goal.' : 'Try adjusting your frequency filters.',
+                          textAlign: TextAlign.center,
                           style: const TextStyle(color: AppColors.textMuted)
                         ),
                       ],
-                    ).animate().fadeIn(duration: 800.ms).scale(begin: const Offset(0.9, 0.9)),
+                    ).animate().fadeIn(duration: 800.ms),
                   ),
                 )
               else
@@ -188,7 +218,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        final task = tasks[index];
+                        final Task task = tasks[index];
                         return _TaskCard(task: task, onCompleted: _onTaskCompleted)
                             .animate(delay: (index * 100).ms)
                             .fadeIn(duration: 500.ms)
@@ -240,9 +270,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+        Text(label, style: const TextStyle(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5)),
+        TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 1200),
+          curve: Curves.easeOutQuart,
+          builder: (context, val, child) => Opacity(
+            opacity: val,
+            child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -1)),
+          ),
+        ),
       ],
     );
   }
@@ -258,7 +296,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _TaskCard extends ConsumerWidget {
-  final dynamic task;
+  final Task task;
   final VoidCallback onCompleted;
   const _TaskCard({required this.task, required this.onCompleted});
 
@@ -278,39 +316,56 @@ class _TaskCard extends ConsumerWidget {
             color: AppColors.error.withOpacity(0.8),
             borderRadius: BorderRadius.circular(24),
           ),
-          child: const Icon(Icons.delete_outline, color: Colors.white, size: 28),
+          child: const Icon(Icons.delete_sweep_rounded, color: Colors.white, size: 28),
         ),
         onDismissed: (_) {
+          HapticFeedback.lightImpact();
           ref.read(taskProvider.notifier).deleteTask(task.id);
         },
         child: GestureDetector(
           onTap: () => context.push('/task-detail', extra: task),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.all(20),
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: isCompleted ? AppColors.surface.withOpacity(0.5) : AppColors.surface,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: isCompleted ? Colors.transparent : Colors.white10, width: 1),
+              color: isCompleted ? Colors.white.withOpacity(0.02) : Colors.white.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(
+                color: isCompleted ? Colors.white.withOpacity(0.05) : Colors.white.withOpacity(0.12), 
+                width: 1
+              ),
+              boxShadow: isCompleted ? [] : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10)
+                )
+              ],
             ),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () {
+                    HapticFeedback.mediumImpact();
                     if (!isCompleted) {
                       onCompleted();
                     }
                     ref.read(taskProvider.notifier).toggleTaskStatus(task.id);
                   },
-                  child: Container(
-                    width: 32,
-                    height: 32,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: 28,
+                    height: 28,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isCompleted ? AppColors.secondary : Colors.transparent,
-                      border: Border.all(color: isCompleted ? AppColors.secondary : AppColors.textMuted, width: 2),
+                      border: Border.all(
+                        color: isCompleted ? AppColors.secondary : Colors.white24, 
+                        width: 2
+                      ),
                     ),
-                    child: isCompleted ? const Icon(Icons.check, size: 20, color: Colors.white) : null,
+                    child: isCompleted ? const Icon(Icons.check_rounded, size: 18, color: Colors.white) : null,
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -320,19 +375,25 @@ class _TaskCard extends ConsumerWidget {
                     children: [
                       Text(
                         task.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: isCompleted ? AppColors.textMuted : AppColors.textPrimary,
+                          color: isCompleted ? AppColors.textMuted : Colors.white,
                           decoration: isCompleted ? TextDecoration.lineThrough : null,
+                          letterSpacing: -0.2,
                         ),
                       ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          const Icon(Icons.timer_outlined, size: 14, color: AppColors.textMuted),
+                          Icon(Icons.schedule_rounded, size: 12, color: isCompleted ? Colors.transparent : AppColors.textMuted),
                           const SizedBox(width: 4),
-                          Text(DateFormat('hh:mm a').format(task.deadline), style: const TextStyle(color: AppColors.textMuted, fontSize: 13)),
+                          Text(
+                            DateFormat('h:mm a').format(task.deadline), 
+                            style: const TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
+                          ),
                           const SizedBox(width: 16),
                           _PriorityBadge(priority: task.priority),
                         ],
@@ -340,12 +401,8 @@ class _TaskCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                IconButton.filledTonal(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const FocusTimerScreen()));
-                  },
-                  icon: const Icon(Icons.play_arrow_rounded, color: AppColors.primaryLight, size: 24),
-                ),
+                if (!isCompleted)
+                  const Icon(Icons.chevron_right_rounded, color: Colors.white12),
               ],
             ),
           ),
@@ -365,19 +422,26 @@ class _PriorityBadge extends StatelessWidget {
     String label;
     if (priority == 3) {
       color = AppColors.error;
-      label = 'High';
+      label = 'CRITICAL';
     } else if (priority == 2) {
       color = AppColors.warning;
-      label = 'Med';
+      label = 'BALANCED';
     } else {
       color = AppColors.secondary;
-      label = 'Low';
+      label = 'ROUTINE';
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-      child: Text(label, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1), 
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.2), width: 0.5),
+      ),
+      child: Text(
+        label, 
+        style: TextStyle(color: color, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1)
+      ),
     );
   }
 }

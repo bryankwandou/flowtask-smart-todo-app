@@ -58,6 +58,12 @@ class PrivacySettingsScreen extends StatelessWidget {
                   () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy'),
                 ),
                 _buildActionTile(
+                  'Data Processing Agreement',
+                  'Legal terms of our backend storage.',
+                  Icons.description_outlined,
+                  () => _showDPASheet(context),
+                ),
+                _buildActionTile(
                   'Delete Account',
                   'Irreversibly wipe all tasks and analytics.',
                   Icons.delete_forever_outlined,
@@ -153,29 +159,131 @@ class PrivacySettingsScreen extends StatelessWidget {
     );
   }
 
+  void _showDPASheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(32))),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        maxChildSize: 0.9,
+        minChildSize: 0.4,
+        expand: false,
+        builder: (context, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(child: Icon(Icons.description_outlined, color: AppColors.primary, size: 48)),
+              const SizedBox(height: 16),
+              const Center(
+                child: Text('Data Processing Agreement', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'By using FlowTask, you enter into a Data Processing Agreement regarding your personal information and task synchronization content.',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '1. Infrastructure: All data processing is executed on Google Firebase servers located in multi-regional clusters (US/EU/Asia).\n\n2. Security: We leverage Firebase Security Rules to enforce row-level security, ensuring only YOU can read/write your tasks.\n\n3. Deletion: We abide by "Right to be Forgotten" mandates. When you delete your account, we propagate those deletion requests to our Firestore and Auth instances immediately.\n\n4. Analytics: All behavioral analytics are anonymized and used strictly to improve the Productivity IQ algorithm.',
+                style: TextStyle(color: AppColors.textSecondary, height: 1.6),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: const Text('I Understand'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showDeleteConfirmation(BuildContext context) {
+    final passwordController = TextEditingController();
+    bool isLoading = false;
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Delete Your Identity?', style: TextStyle(color: Colors.white)),
-        content: const Text(
-          'This action is irreversible. All your flow patterns, session history, and intelligence reports will be permanently purged from our secure servers. In compliance with Play Store policy, you can also delete your account via our web portal.',
-          style: TextStyle(color: AppColors.textSecondary),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () async {
-              await AuthService.deleteAccount();
-              if (context.mounted) {
-                context.go('/login');
-              }
-            },
-            child: const Text('WIPE DATA', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+      barrierDismissible: false,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          title: const Text('Confirm Identity Deletion', style: TextStyle(color: Colors.white)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'This action is permanent. All your tasks, productivity analytics, and profile data will be purged. Please enter your password to confirm.',
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.05),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                ),
+              ),
+            ],
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: isLoading ? null : () => Navigator.pop(context), 
+              child: const Text('Cancel')
+            ),
+            ElevatedButton(
+              onPressed: isLoading ? null : () async {
+                if (passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Password required for deletion'))
+                  );
+                  return;
+                }
+
+                setState(() => isLoading = true);
+                try {
+                  await AuthService.deleteAccount(passwordController.text);
+                  if (context.mounted) {
+                    Navigator.pop(context); // Close dialog
+                    context.go('/login');
+                  }
+                } catch (e) {
+                  setState(() => isLoading = false);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to delete: ${e.toString()}'))
+                    );
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: isLoading 
+                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                : const Text('WIPE DATA', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
       ),
     );
   }

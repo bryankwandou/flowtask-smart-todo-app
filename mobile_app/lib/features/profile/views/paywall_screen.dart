@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/providers/settings_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PaywallScreen extends StatelessWidget {
+class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
+
+  @override
+  ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
+}
+
+class _PaywallScreenState extends ConsumerState<PaywallScreen> {
+  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +79,8 @@ class PaywallScreen extends StatelessWidget {
                         
                         const SizedBox(height: 60),
                         
+                        const SizedBox(height: 60),
+                        
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(24),
@@ -79,11 +91,11 @@ class PaywallScreen extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              const Text('MONTHLY PASS', style: TextStyle(color: AppColors.primaryLight, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 2)),
-                              const SizedBox(height: 8),
-                              const Text('\$4.99 / month', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                              const Text('FOUNDER\'S ALPHA', style: TextStyle(color: AppColors.primaryLight, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 2)),
+                              const SizedBox(height: 12),
+                              const Text('FREE ACCESS', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
                               const SizedBox(height: 4),
-                              const Text('7-day free trial included', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                              const Text('Limited to first 10,000 members', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
                             ],
                           ),
                         ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.9, 0.9)),
@@ -91,7 +103,7 @@ class PaywallScreen extends StatelessWidget {
                         const SizedBox(height: 32),
                         
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: _isProcessing ? null : _handleFounderUnlock,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
@@ -99,12 +111,36 @@ class PaywallScreen extends StatelessWidget {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                             elevation: 0,
                           ),
-                          child: const Text('START FREE TRIAL', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                          child: _isProcessing 
+                            ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                            : const Text('UNLOCK FOUNDER EXPERIENCE', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1)),
                         ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5, end: 0),
                         
                         const SizedBox(height: 24),
-                        const Text('Restore Purchases', style: TextStyle(color: AppColors.textMuted, fontSize: 13, decoration: TextDecoration.underline)),
-                        const SizedBox(height: 40),
+                        const Text(
+                          'Alpha features are provided as a community reward. No payment required for this release.', 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: AppColors.textMuted, fontSize: 11),
+                        ),
+                        
+                        const SizedBox(height: 48),
+
+                        // Legal Footer (Mandatory for Store Approval)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () => launchUrl(Uri.parse('https://flowtask-smart-todo-app.vercel.app/privacy')),
+                              child: const Text('Privacy Policy', style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline)),
+                            ),
+                            Container(width: 1, height: 12, color: Colors.white24, margin: const EdgeInsets.symmetric(horizontal: 16)),
+                            GestureDetector(
+                              onTap: () => launchUrl(Uri.parse('https://flowtask-smart-todo-app.vercel.app/terms')),
+                              child: const Text('Terms of Service', style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 60),
                       ],
                     ),
                   ),
@@ -115,6 +151,26 @@ class PaywallScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _handleFounderUnlock() async {
+    setState(() => _isProcessing = true);
+    
+    // Simulate cognitive sync delay
+    await Future.delayed(const Duration(seconds: 1));
+    
+    await ref.read(settingsProvider.notifier).setFounderPass(true);
+    
+    if (mounted) {
+      setState(() => _isProcessing = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Founder Alpha Access Unlocked! Welcome to the flow.'),
+          backgroundColor: AppColors.secondary,
+        ),
+      );
+      Navigator.pop(context);
+    }
   }
 
   Widget _buildFeatureRow(IconData icon, String title, String subtitle) {

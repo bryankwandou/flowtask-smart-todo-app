@@ -110,6 +110,34 @@ exports.onTaskWrite = functions.firestore
   });
 
 // ==========================================
+// COMPLIANCE & DATA LIFECYCLE
+// ==========================================
+
+/**
+ * Irreversibly purges all data associated with a user when their account is deleted.
+ * This ensures compliance with Google Play Data Safety policies.
+ */
+exports.onUserDeleted = functions.auth.user().onDelete(async (user) => {
+  const uid = user.uid;
+  const batch = db.batch();
+
+  // 1. Purge Productivity Stats
+  batch.delete(db.collection("productivity_stats").doc(uid));
+
+  // 2. Purge User Record
+  batch.delete(db.collection("users").doc(uid));
+
+  // 3. Purge Tasks (Batched deletion)
+  const tasksSnapshot = await db.collection("tasks").where("user_id", "==", uid).get();
+  tasksSnapshot.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+
+  console.log(`Purging infrastructure for user: ${uid}. Docs counted: ${tasksSnapshot.size + 2}`);
+  return batch.commit();
+});
+
+// ==========================================
 // NOTIFICATIONS
 // ==========================================
 
@@ -117,7 +145,7 @@ exports.scheduleReminder = functions.https.onCall(async (data, context) => {
   if (!context.auth) throw new functions.https.HttpsError("unauthenticated", "User must be logged in.");
   
   // Implementation for inserting into a cron-job queue 
-  // (Assuming we use a Pub/Sub trigger for actual dispatch)
+  // Actual delivery logic would typically involve a Pub/Sub trigger
   
   return { success: true, message: "Reminder scheduled based on user focus patterns." };
 });

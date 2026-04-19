@@ -81,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
                                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                               ),
                               const SizedBox(height: 24),
-                              _buildProBadge(context),
+                              _buildProBadge(context, settings.isFounderPass),
                             ],
                           ),
                         ),
@@ -108,37 +108,39 @@ class ProfileScreen extends ConsumerWidget {
                     Icons.notifications_none_rounded, 
                     'Notifications', 
                     'Schedule, alerts & sounds', 
-                    () => _launchURL('https://flowtask-smart-todo-app.vercel.app/docs/notifications')
+                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/docs')
                   ),
 
                   const SizedBox(height: 32),
-                  _buildSection('Support & Help'),
-                  _buildOptionTile(
-                    Icons.help_outline_rounded, 
-                    'Help Center', 
-                    'FAQs and troubleshooting', 
-                    () => _launchURL('https://flowtask-smart-todo-app.vercel.app/faq')
-                  ),
+                  // Policy & Safety Section
+                  _buildSection('Safety & Legal'),
                   _buildOptionTile(
                     Icons.policy_outlined, 
-                    'Privacy & Data', 
-                    'Manage your intelligence patterns', 
-                    () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacySettingsScreen()))
+                    'Privacy Policy', 
+                    'Review our data handling practices', 
+                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/privacy')
                   ),
                   _buildOptionTile(
-                    Icons.info_outline_rounded, 
-                    'About FlowTask', 
-                    'v1.0.8 (Stable)', 
-                    () => _showAboutDialog(context)
+                    Icons.gavel_rounded, 
+                    'Terms of Service', 
+                    'Acceptable usage and legal terms', 
+                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/terms')
+                  ),
+                  _buildOptionTile(
+                    Icons.security_rounded, 
+                    'Security & Data Deletion', 
+                    'Manage your account and purge data', 
+                    () => context.push('/privacy-settings')
                   ),
 
                   const SizedBox(height: 48),
 
                   // Actions
                   OutlinedButton.icon(
-                    onPressed: () {
-                      authRepository.signOut();
-                      context.go('/login');
+                    onPressed: () async {
+                      final authRepository = ref.read(authRepositoryProvider);
+                      await authRepository.signOut();
+                      if (context.mounted) context.go('/login');
                     },
                     icon: const Icon(Icons.logout_rounded),
                     label: const Text('Sign Out'),
@@ -150,13 +152,16 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                   const SizedBox(height: 16),
                   TextButton.icon(
                     onPressed: () => _confirmAccountDeletion(context, ref),
                     icon: const Icon(Icons.delete_forever_rounded, color: AppColors.error),
-                    label: const Text('Delete Account', style: TextStyle(color: AppColors.error)),
+                    label: const Text(
+                      'DELETE ACCOUNT', 
+                      style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold, letterSpacing: 1.1, fontSize: 12)
+                    ),
                     style: TextButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 56),
+                      minimumSize: const Size(double.infinity, 48),
                     ),
                   ),
                   const SizedBox(height: 100),
@@ -169,10 +174,14 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _launchURL(String url) async {
+  Future<void> _launchURL(BuildContext context, String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open $url'))
+        );
+      }
     }
   }
 
@@ -211,19 +220,40 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildProBadge(BuildContext context) {
+  Widget _buildProBadge(BuildContext context, bool isPremium) {
+    if (!isPremium) {
+      return ElevatedButton.icon(
+        onPressed: () => context.push('/paywall'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        ),
+        icon: const Icon(Icons.bolt_rounded, size: 18),
+        label: const Text('UPGRADE TO PRO', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+      );
+    }
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
-        borderRadius: BorderRadius.circular(12),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFACC15), Color(0xFFEAB308)], // Gold gradients
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.amber.withOpacity(0.3), blurRadius: 15, spreadRadius: 1)
+        ],
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.auto_awesome, color: Colors.white, size: 16),
+          Icon(Icons.auto_awesome, color: Color(0xFF422006), size: 16),
           SizedBox(width: 8),
-          Text('FLOW MASTER', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 1.1)),
+          Text('FLOW MASTER PRO', style: TextStyle(color: Color(0xFF422006), fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 1.2)),
         ],
       ),
     );
@@ -233,7 +263,7 @@ class ProfileScreen extends ConsumerWidget {
     showAboutDialog(
       context: context,
       applicationName: 'FlowTask',
-      applicationVersion: '1.0.8 (Build 2026)',
+      applicationVersion: '1.0.9+28',
       applicationLegalese: '© 2026 nayrbryanGaming. All rights reserved.',
       applicationIcon: const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 48),
       children: [
@@ -307,32 +337,29 @@ class ProfileScreen extends ConsumerWidget {
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Delete Account?', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+        title: const Text('Purge Account?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: const Text(
-          'This action is irreversible. All your productivity stats and focus history will be permanently wiped from the FlowTask secure servers.',
-          style: TextStyle(color: AppColors.textPrimary),
+          'This action is irreversible. All your tasks, productivity IQ reports, and sync data will be permanently deleted from our servers in compliance with Google Play Store data safety policies.',
+          style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text('CANCEL', style: TextStyle(color: AppColors.textMuted)),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
-              try {
-                await ref.read(authRepositoryProvider).deleteAccount();
-                if (context.mounted) context.go('/login');
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.error),
-                  );
-                }
-              }
+              // Redirect to privacy settings where the final purge button lives
+              // This multi-step process prevents accidental deletion rejections
+              GoRouter.of(context).push('/privacy-settings');
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
-            child: const Text('Delete Permanently'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('PROCEED TO PURGE', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),

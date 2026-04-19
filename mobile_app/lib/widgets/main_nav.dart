@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../features/tasks/views/home_screen.dart';
 import '../features/analytics/views/analytics_screen.dart';
 import '../features/profile/views/profile_screen.dart';
@@ -33,7 +34,12 @@ class _MainNavWrapperState extends State<MainNavWrapper> {
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
+          onTap: (index) {
+            if (_currentIndex != index) {
+              HapticFeedback.selectionClick();
+              setState(() => _currentIndex = index);
+            }
+          },
           backgroundColor: AppColors.background,
           selectedItemColor: AppColors.primary,
           unselectedItemColor: AppColors.textSecondary,

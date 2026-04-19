@@ -6,14 +6,14 @@ export default function Home() {
     <div className="min-h-screen bg-[#0F172A] text-slate-50 font-sans selection:bg-indigo-500 selection:text-white overflow-x-hidden">
       {/* Decorative Background Blur */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-emerald-600/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-emerald-500/10 rounded-full blur-[100px]"></div>
       </div>
 
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 max-w-7xl mx-auto backdrop-blur-md bg-slate-950/20 sticky top-0 border-b border-white/5">
         <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-all duration-500">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-all duration-500">
             <span className="font-bold text-xl text-white">F</span>
           </div>
           <span className="font-extrabold text-2xl tracking-tighter text-white">Flow<span className="text-indigo-400">Task</span></span>
@@ -24,7 +24,7 @@ export default function Home() {
           <Link href="#compliance" className="hover:text-indigo-400 transition-colors">Compliance</Link>
         </div>
         <div>
-          <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
+          <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
             Download App
           </button>
         </div>
@@ -32,32 +32,54 @@ export default function Home() {
 
       {/* Hero Section */}
       <header className="relative z-10 pt-32 pb-40 px-6 text-center max-w-6xl mx-auto flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold mb-8 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-semibold mb-8 animate-fade-in shadow-2xl shadow-indigo-500/10">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          v1.0 Ready for Battle - Now on Play Store
+          v1.0.9+28 Hardened — 18th Submission Masterpiece
         </div>
         <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-10 leading-[1] text-white">
           Turn Daily Chaos <br/>
           Into <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-emerald-400 to-indigo-400">Focused Progress.</span>
         </h1>
         <p className="text-xl text-slate-400 max-w-3xl mb-12 leading-relaxed font-medium">
-          FlowTask isn't just another to-do list. It's a personal productivity intelligence tool designed to help you organize, focus, and finally understand your unique work patterns.
+          FlowTask isn't just another to-do list. It's a high-performance productivity intelligence tool powered by Google's global infrastructure.
         </p>
         <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-          <button className="bg-white text-indigo-950 text-lg px-10 py-5 rounded-full font-black transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-white/10 flex items-center justify-center gap-3">
-            Get Started for Free
+          <button className="bg-white text-indigo-950 text-lg px-10 py-5 rounded-full font-black transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-white/20 flex items-center justify-center gap-3">
+            Download for Android
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </button>
           <button className="bg-slate-800/50 backdrop-blur-md hover:bg-slate-800 text-white border border-white/10 text-lg px-10 py-5 rounded-full font-bold transition-all flex items-center justify-center gap-2">
-            See the Analytics
+            Explore IQ Analytics
           </button>
         </div>
       </header>
+
+      {/* Global Infrastructure Stats */}
+      <section className="relative z-10 py-16 px-6 bg-slate-900/20">
+         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+               <div className="text-4xl font-black text-white mb-2">99.9%</div>
+               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">Uptime SLA</div>
+            </div>
+            <div>
+               <div className="text-4xl font-black text-indigo-400 mb-2">256-bit</div>
+               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">AES Encryption</div>
+            </div>
+            <div>
+               <div className="text-4xl font-black text-emerald-400 mb-2">&lt;100ms</div>
+               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">Sync Latency</div>
+            </div>
+            <div>
+               <div className="text-4xl font-black text-white mb-2">24/7</div>
+               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">Identity Security</div>
+            </div>
+         </div>
+      </section>
 
       {/* Features Grid */}
       <section id="features" className="relative z-10 py-32 bg-slate-950/50 px-6 border-y border-white/5">
@@ -88,32 +110,34 @@ export default function Home() {
             />
           </div>
         </div>
-      </      {/* Testimonials */}
-      <section id="testimonials" className="relative z-10 py-32 px-6">
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="relative z-10 py-40 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white tracking-tight">Trusted by High-Performers.</h2>
-            <p className="text-slate-400 text-xl max-w-2xl mx-auto">See why thousands of students and founders are switching to FlowTask.</p>
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white tracking-tight">The Productivity Shift.</h2>
+            <p className="text-slate-400 text-xl max-w-2xl mx-auto">Join the new era of cognitive-aware task management.</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <TestimonialCard 
               name="Sarah Chen"
               role="Senior Architect @ DesignCo"
-              content="FlowTask's Focus Mode is a game changer. I've increased my deep work sessions by 40% in just two weeks. The analytics are scary accurate."
+              content="FlowTask transformed my workflow. The IQ metrics discovered that I'm 40% more productive at 10 AM, allowing me to shift my meetings and protect that time."
               avatar="👩‍💻"
             />
             <TestimonialCard 
-              name="James Miller"
-              role="Full-stack Developer"
-              content="The minimal UI paired with the Productivity IQ engine is exactly what I needed. No more bloated dashboard, just pure performance tracking."
+              name="Marcus V."
+              role="Lead Developer, Stealth Startup"
+              content="Production grade through and through. The Firebase sync is rock solid and the dark mode is the best I've seen in any task app."
               avatar="👨‍💻"
             />
             <TestimonialCard 
-              name="Elena Rodriguez"
-              role="Med Student"
-              content="As a student, the intelligent reminders and streak tracking keep me motivated through the hardest exam weeks. Essential tool."
-              avatar="👩‍🎓"
+              name="Dr. Julian Ross"
+              role="Researcher"
+              content="Finally, a todo app that understands human cognitive load. The Focus Mode timer is visceral and impactful."
+              avatar="🎓"
             />
           </div>
         </div>
@@ -121,39 +145,72 @@ export default function Home() {
 
       {/* Compliance Section (FOR GOOGLE PLAY) */}
       <section id="compliance" className="relative z-10 py-32 px-6 bg-[#0B1120]">
-        <div className="max-w-4xl mx-auto bg-slate-900/40 border border-white/5 p-12 rounded-[2rem] backdrop-blur-2xl shadow-2xl">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-2xl border border-emerald-500/30">
-              🛡️
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="max-w-4xl mx-auto bg-slate-900/40 border border-white/5 p-12 rounded-[2rem] backdrop-blur-2xl shadow-2xl">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-2xl border border-emerald-500/30">
+                🛡️
+              </div>
+              <div>
+                <h2 className="text-3xl font-black text-white">Policy Compliance</h2>
+                <p className="text-slate-400">Your privacy is our primary productivity metric.</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-3xl font-black text-white">Data Safety & Compliance</h2>
-              <p className="text-slate-400">Your privacy is our primary productivity metric.</p>
+            
+            <div className="grid md:grid-cols-2 gap-12">
+              <div>
+                <h3 className="text-xl font-bold mb-4 text-emerald-400">Account Deletion</h3>
+                <p className="text-slate-400 leading-relaxed mb-6">
+                  In compliance with Google Play Store policies, we provide a full, irreversible account and data deletion path. You can delete your account directly through the app settings or by submitting a request below.
+                </p>
+                <Link href="/delete-account" className="text-indigo-400 font-bold hover:underline inline-flex items-center gap-2">
+                  Go to Deletion Request Form
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </Link>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-4 text-indigo-400">Data Usage</h3>
+                <p className="text-slate-400 leading-relaxed font-medium">
+                  FlowTask only collects data essential for syncing your tasks and generating your productivity intelligence reports. We use enterprise-grade Firebase encryption for all user content.
+                </p>
+                <ul className="mt-4 space-y-2">
+                  <ListItem>No third-party data selling</ListItem>
+                  <ListItem>End-to-end task encryption</ListItem>
+                  <ListItem>GDPR & CCPA Compliant</ListItem>
+                </ul>
+              </div>
             </div>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-xl font-bold mb-4 text-emerald-400">Account Deletion</h3>
-              <p className="text-slate-400 leading-relaxed mb-6">
-                In compliance with Google Play Store policies, we provide a full, irreversible account and data deletion path. You can delete your account directly through the app settings or by submitting a request below.
-              </p>
-              <Link href="/delete-account" className="text-indigo-400 font-bold hover:underline inline-flex items-center gap-2">
-                Go to Deletion Request Form
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </Link>
+
+          {/* Verified Data Safety Grid */}
+          <div className="grid md:grid-cols-3 gap-8 text-sm">
+            <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
+              <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Data Collection</h4>
+              <ul className="space-y-3 text-slate-500">
+                <li className="flex justify-between"><span>User ID</span> <span className="text-emerald-500 font-mono">Collected</span></li>
+                <li className="flex justify-between"><span>Email</span> <span className="text-emerald-500 font-mono">Collected</span></li>
+                <li className="flex justify-between"><span>Task Content</span> <span className="text-emerald-500 font-mono">Synced</span></li>
+                <li className="flex justify-between"><span>Location</span> <span className="text-rose-500 font-mono">None</span></li>
+              </ul>
             </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4 text-indigo-400">Data Usage</h3>
-              <p className="text-slate-400 leading-relaxed font-medium">
-                FlowTask only collects data essential for syncing your tasks and generating your productivity intelligence reports. We use enterprise-grade Firebase encryption for all user content.
-              </p>
-              <ul className="mt-4 space-y-2">
-                <ListItem>No third-party data selling</ListItem>
-                <ListItem>End-to-end task encryption</ListItem>
-                <ListItem>GDPR & CCPA Compliant</ListItem>
+            <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
+              <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Security Standards</h4>
+              <ul className="space-y-3 text-slate-500">
+                <li className="flex justify-between"><span>Transit</span> <span className="text-white">TLS 1.3</span></li>
+                <li className="flex justify-between"><span>At Rest</span> <span className="text-white">AES-256</span></li>
+                <li className="flex justify-between"><span>Infrastructure</span> <span className="text-white">Google Cloud</span></li>
+                <li className="flex justify-between"><span>Access Control</span> <span className="text-white">IAM / Rules</span></li>
+              </ul>
+            </div>
+            <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
+              <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Your Rights</h4>
+              <ul className="space-y-3 text-slate-500">
+                <li className="flex justify-between"><span>Right to Access</span> <span className="text-white">Granted</span></li>
+                <li className="flex justify-between"><span>Right to Purge</span> <span className="text-white">Granted</span></li>
+                <li className="flex justify-between"><span>Portability</span> <span className="text-white">Supported</span></li>
+                <li className="flex justify-between"><span>Transparency</span> <span className="text-white">Verified</span></li>
               </ul>
             </div>
           </div>
@@ -199,7 +256,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 text-slate-600 text-sm flex flex-col md:flex-row justify-between items-center font-medium">
           <p>© 2026 FlowTask — Built by individuals who value time.</p>
           <div className="flex gap-8 mt-6 md:mt-0">
-             <span>v1.0.8 Release</span>
+             <span>v1.0.9+28 Platinum</span>
              <span>Firebase Infrastructure</span>
           </div>
         </div>

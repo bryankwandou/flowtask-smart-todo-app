@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Task {
   final String id;
   final String title;
   final String description;
   final int priority; // 1: Low, 2: Medium, 3: High
-  final String status; // pending, in_progress, completed
+  final String status; // pending, completed
   final DateTime deadline;
   final DateTime createdAt;
   final DateTime? completedAt;
@@ -43,16 +43,28 @@ class Task {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  factory Task.fromFirestore(Map<String, dynamic> data, String id) {
+    return Task(
+      id: id,
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
+      priority: data['priority'] ?? 1,
+      status: data['status'] ?? 'pending',
+      deadline: (data['deadline'] as Timestamp).toDate(),
+      createdAt: (data['created_at'] as Timestamp).toDate(),
+      completedAt: (data['completed_at'] as Timestamp?)?.toDate(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
       'description': description,
       'priority': priority,
       'status': status,
-      'deadline': deadline.toIso8601String(),
-      'createdAt': createdAt.toIso8601String(),
-      'completedAt': completedAt?.toIso8601String(),
+      'deadline': Timestamp.fromDate(deadline),
+      'created_at': Timestamp.fromDate(createdAt),
+      'completed_at': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
     };
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/colors.dart';
-import '../providers/task_provider.dart';
+import '../../features/tasks/providers/task_provider.dart';
 
 class TaskCreationSheet extends ConsumerStatefulWidget {
   const TaskCreationSheet({super.key});
@@ -69,26 +70,37 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             const SizedBox(height: 12),
             Row(
               children: [
-                _PrioritySelector(label: 'LOW', val: 1, current: _priority, color: AppColors.secondary, onTap: (v) => setState(() => _priority = v)),
+                _PrioritySelector(label: 'LOW', val: 1, current: _priority, color: AppColors.secondary, onTap: (v) {
+                  HapticFeedback.lightImpact();
+                  setState(() => _priority = v);
+                }),
                 const SizedBox(width: 8),
-                _PrioritySelector(label: 'MEDIUM', val: 2, current: _priority, color: AppColors.warning, onTap: (v) => setState(() => _priority = v)),
+                _PrioritySelector(label: 'MEDIUM', val: 2, current: _priority, color: AppColors.warning, onTap: (v) {
+                  HapticFeedback.lightImpact();
+                  setState(() => _priority = v);
+                }),
                 const SizedBox(width: 8),
-                _PrioritySelector(label: 'HIGH', val: 3, current: _priority, color: AppColors.error, onTap: (v) => setState(() => _priority = v)),
+                _PrioritySelector(label: 'HIGH', val: 3, current: _priority, color: AppColors.error, onTap: (v) {
+                  HapticFeedback.selectionClick();
+                  setState(() => _priority = v);
+                }),
               ],
             ),
             
             const SizedBox(height: 24),
-            const Text('Deadline', style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 1.2)),
-            const SizedBox(height: 12),
             InkWell(
               onTap: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: _deadline,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 365)),
-                );
-                if (date != null) setState(() => _deadline = date);
+                  HapticFeedback.selectionClick();
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: _deadline,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                  );
+                  if (date != null) {
+                    HapticFeedback.lightImpact();
+                    setState(() => _deadline = date);
+                  }
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -112,6 +124,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             ElevatedButton(
               onPressed: () {
                 if (_titleController.text.isNotEmpty) {
+                  HapticFeedback.mediumImpact();
                   ref.read(taskProvider.notifier).addTask(
                     _titleController.text,
                     _descController.text,

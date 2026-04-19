@@ -1,74 +1,74 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
 import 'package:uuid/uuid.dart';
 import '../../reminders/services/reminder_service.dart';
+import '../../../services/database_service.dart';
+
+final databaseServiceProvider = Provider((ref) => DatabaseService());
 
 final taskProvider = StateNotifierProvider<TaskNotifier, List<Task>>((ref) {
-  return TaskNotifier(ref);
+  final db = ref.watch(databaseServiceProvider);
+  return TaskNotifier(ref, db);
 });
 
 class TaskNotifier extends StateNotifier<List<Task>> {
   final Ref _ref;
-  TaskNotifier(this._ref) : super([]) {
-    _loadMockData(); 
+  final DatabaseService _db;
+
+  TaskNotifier(this._ref, this._db) : super([]) {
+    _listenToTasks();
   }
 
-  void _loadMockData() {
-    state = [
-      Task(
-        id: const Uuid().v4(),
-        title: 'Complete System Architecture',
-        description: 'Document the data flow between Flutter and Firebase.',
-        priority: 3,
+  void _listenToTasks() {
+    _db.getTasksStream().listen((tasks) {
+      state = tasks;
+    });
+  }
+
+  Future<void> addTask(String title, String description, int priority, DateTime deadline) async {
+    try {
+      final newTask = Task(
+        id: '', // Will be updated by DB
+        title: title,
+        description: description,
+        priority: priority,
         status: 'pending',
-        deadline: DateTime.now().add(const Duration(hours: 24)),
+        deadline: deadline,
         createdAt: DateTime.now(),
-      ),
-      Task(
-        id: const Uuid().v4(),
-        title: 'Review Play Store Legal Docs',
-        description: 'Check privacy policy compliance.',
-        priority: 2,
-        status: 'completed',
-        deadline: DateTime.now().subtract(const Duration(hours: 2)),
-        createdAt: DateTime.now().subtract(const Duration(days: 1)),
-        completedAt: DateTime.now().subtract(const Duration(hours: 5)),
-      ),
-    ];
+      );
+      
+      final taskId = await _db.createTask(newTask);
+      
+      await _ref.read(reminderServiceProvider).scheduleTaskReminder(
+        taskId: taskId,
+        title: title,
+        deadline: deadline,
+      );
+    } catch (e) {
+      // Logic for error reporting would go here (e.g. state = ErrorState)
+      rethrow;
+    }
   }
 
-  void addTask(String title, String description, int priority, DateTime deadline) {
-    final newTask = Task(
-      id: const Uuid().v4(),
-      title: title,
-      description: description,
-      priority: priority,
-      status: 'pending',
-      deadline: deadline,
-      createdAt: DateTime.now(),
-    );
-    state = [...state, newTask];
-    _ref.read(reminderServiceProvider).scheduleTaskReminder(
-      taskId: newTask.id,
-      title: newTask.title,
-      deadline: deadline,
-    );
+  Future<void> toggleTaskStatus(String id) async {
+    try {
+      final task = state.firstWhere((t) => t.id == id);
+      final isCompleted = task.status == 'completed';
+      final newStatus = isCompleted ? 'pending' : 'completed';
+      final completedAt = isCompleted ? null : DateTime.now();
+      
+      await _db.updateTaskStatus(id, newStatus, completedAt);
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  void toggleTaskStatus(String id) {
-    state = state.map((task) {
-      if (task.id == id) {
-        final isCompleted = task.status == 'completed';
-        return task.copyWith(
-          status: isCompleted ? 'pending' : 'completed',
-          completedAt: isCompleted ? null : DateTime.now(),
-        );
-      }
-      return task;
-    }).toList();
-  }
-
-  void deleteTask(String id) {
-    _ref.read(reminderServiceProvider).cancelReminder(id);
-    state = state.where((task) => task.id != id).toList();
+  Future<void> deleteTask(String id) async {
+    try {
+      await _ref.read(reminderServiceProvider).cancelReminder(id);
+      await _db.deleteTask(id);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

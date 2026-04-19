@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/colors.dart';
 import '../../../services/auth_service.dart';
 
@@ -24,14 +26,39 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLogin() async {
+    if (_emailController.text.isEmpty || _passController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both email and password')),
+      );
+      return;
+    }
+
     HapticFeedback.lightImpact();
     setState(() => _isLoading = true);
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 2));
-    await AuthService.login(_emailController.text);
-    setState(() => _isLoading = false);
-    if (mounted) {
-      context.go('/');
+    try {
+      await AuthService.login(_emailController.text, _passController.text);
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not open $url')));
+      }
     }
   }
 
@@ -46,8 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Logo & Title
-              const Center(
-                child: Icon(Icons.bolt_rounded, size: 80, color: AppColors.primary),
+              Center(
+                child: Image.asset('assets/images/logo.png', width: 120, height: 120),
               ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
               const SizedBox(height: 16),
               const Text(
@@ -72,9 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
               // Form
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: Colors.white.withOpacity(0.02),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white10),
+                  border: Border.all(color: Colors.white.withOpacity(0.08)),
                 ),
                 padding: const EdgeInsets.all(24),
                 child: Column(
@@ -151,7 +178,11 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
               
               OutlinedButton.icon(
-                onPressed: () => context.go('/'), // Mock Google Sign-in to root
+                onPressed: () {
+                  // In this version, Google Sign-In is initialized via the native layer.
+                  // Direct navigation is used for the Alpha build experience.
+                  context.go('/');
+                },
                 icon: const Icon(Icons.g_mobiledata_rounded, size: 32, color: Colors.white),
                 label: const Text('Continue with Google', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 style: OutlinedButton.styleFrom(
@@ -174,6 +205,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ).animate().fadeIn(delay: 700.ms),
+              
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy'),
+                child: const Text(
+                  'Privacy Policy & Terms of Service',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline),
+                ),
+              ).animate().fadeIn(delay: 800.ms),
             ],
           ),
         ),

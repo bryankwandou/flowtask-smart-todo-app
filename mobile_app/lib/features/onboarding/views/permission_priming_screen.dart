@@ -46,7 +46,7 @@ class PermissionPrimingScreen extends StatelessWidget {
               const SizedBox(height: 16),
               
               const Text(
-                'FlowTask needs to send you smart reminders to help you maintain focus and hit your daily streaks. We only alert you when it truly matters.',
+                'FlowTask needs to send you smart reminders to help you maintain focus and hit your daily streaks. We use high-precision alarms to ensure your scheduled focus sessions start exactly when you need them.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,

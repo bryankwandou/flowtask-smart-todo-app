@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../services/auth_service.dart';
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 final firestoreProvider = Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
@@ -22,30 +23,15 @@ class AuthRepository {
   }
 
   /// CRITICAL FOR PLAY STORE COMPLIANCE: 
-  /// Deletes all user data from Firestore and then deletes the Auth account.
-  Future<void> deleteAccount() async {
-    final user = _auth.currentUser;
-    if (user == null) return;
-
-    final uid = user.uid;
-
-    // 1. Delete user tasks
-    final tasksQuery = await _db.collection('tasks').where('user_id', '==', uid).get();
-    final batch = _db.batch();
-    for (var doc in tasksQuery.docs) {
-      batch.delete(doc.reference);
+  /// Deletes all user data (Firestore, Reminders, and Auth).
+  /// Note: Prefers using AuthService for re-authentication security.
+  Future<void> deleteAccount({String? password}) async {
+    if (password != null) {
+      await AuthService.deleteAccount(password);
+    } else {
+      // Fallback for flows without direct password input (e.g. recent login)
+      // BUT we should really always use the password flow for security.
+      throw Exception('Re-authentication required. Please use the Security settings to delete your account.');
     }
-    
-    // 2. Delete productivity stats
-    batch.delete(_db.collection('productivity_stats').doc(uid));
-    
-    // 3. Delete user profile
-    batch.delete(_db.collection('users').doc(uid));
-
-    // Commit Firestore deletions
-    await batch.commit();
-
-    // 4. Finally, delete the Firebase Auth account
-    await user.delete();
   }
 }

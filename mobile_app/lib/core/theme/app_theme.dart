@@ -26,7 +26,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       
       textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme).copyWith(
-        displayLarge: GoogleFonts.outfit(fontSize: 56, fontWeight: FontWeight.extrabold, color: AppColors.textPrimary, letterSpacing: -1.5),
+        displayLarge: GoogleFonts.outfit(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.textPrimary, letterSpacing: -1.5),
         displayMedium: GoogleFonts.outfit(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -1.0),
         displaySmall: GoogleFonts.outfit(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.textPrimary, letterSpacing: -0.5),
         headlineMedium: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
@@ -55,7 +55,7 @@ class AppTheme {
         ),
       ),
 
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: Colors.white.withOpacity(0.02),
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -74,7 +74,7 @@ class AnalyticsScreen extends ConsumerWidget {
             children: [
               const Text('Current Streak', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
-              Text('${streak.toString().padLeft(2, '0')} Days', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.extrabold)),
+              Text('${streak.toString().padLeft(2, '0')} Days', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
             ],
           ),
           Container(

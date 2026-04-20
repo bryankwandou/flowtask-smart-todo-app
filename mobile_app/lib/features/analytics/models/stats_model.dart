@@ -5,6 +5,7 @@ class ProductivityStats {
   final double completionRate;
   final String peakHour;
   final List<double> weeklyVelocity;
+  final bool isBaseline;
 
   ProductivityStats({
     required this.totalTasks,
@@ -13,6 +14,7 @@ class ProductivityStats {
     required this.completionRate,
     required this.peakHour,
     required this.weeklyVelocity,
+    required this.isBaseline,
   });
 
   factory ProductivityStats.initial() {
@@ -23,6 +25,7 @@ class ProductivityStats {
       completionRate: 0.0,
       peakHour: 'N/A',
       weeklyVelocity: List.filled(7, 0.0),
+      isBaseline: true,
     );
   }
 }

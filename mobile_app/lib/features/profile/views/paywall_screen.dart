@@ -191,7 +191,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               children: [
                 Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 14)),
+                Text(subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 14)),
               ],
             ),
           ),

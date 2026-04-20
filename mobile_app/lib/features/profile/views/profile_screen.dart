@@ -78,7 +78,7 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                               Text(
                                 user?.email ?? 'premium@flowtask.app',
-                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
                               ),
                               const SizedBox(height: 24),
                               _buildProBadge(context, settings.isFounderPass),
@@ -192,7 +192,7 @@ class ProfileScreen extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 4, bottom: 12),
         child: Text(
           title.toUpperCase(),
-          style: const TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+          style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5),
         ),
       ),
     );
@@ -213,7 +213,7 @@ class ProfileScreen extends ConsumerWidget {
           child: Icon(icon, color: AppColors.primaryLight, size: 22),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-        subtitle: Text(subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+        subtitle: Text(subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
         trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
         onTap: onTap,
       ),

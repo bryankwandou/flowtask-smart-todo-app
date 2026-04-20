@@ -118,7 +118,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 
                 Text(
                   taskState.description.isEmpty ? 'No detailed transmission provided for this node.' : taskState.description,
-                  style: const TextStyle(fontSize: 17, color: AppColors.textSecondary, height: 1.6),
+                  style: TextStyle(fontSize: 17, color: AppColors.textSecondary, height: 1.6),
                 ).animate().fadeIn(delay: 400.ms),
                 
                 const SizedBox(height: 56),
@@ -197,7 +197,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
             const SizedBox(height: 6),
             Text(value, style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)),
           ],

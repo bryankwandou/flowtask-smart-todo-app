@@ -151,7 +151,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
                                   ),
                                   Text(
                                     focus.status == FocusState.completed ? 'FINISHED' : (focus.status == FocusState.initial ? 'PRESET' : 'REMAINING'),
-                                    style: const TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
+                                    style: TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
                                   ),
                                 ],
                               ),

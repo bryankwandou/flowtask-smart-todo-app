@@ -206,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Text(
                           _searchQuery.isEmpty ? 'Tap the pulse button to capture your next goal.' : 'Try adjusting your frequency filters.',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: AppColors.textMuted)
+                          style: TextStyle(color: AppColors.textMuted)
                         ),
                       ],
                     ).animate().fadeIn(duration: 800.ms),
@@ -392,7 +392,7 @@ class _TaskCard extends ConsumerWidget {
                           const SizedBox(width: 4),
                           Text(
                             DateFormat('h:mm a').format(task.deadline), 
-                            style: const TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
+                            style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
                           ),
                           const SizedBox(width: 16),
                           _PriorityBadge(priority: task.priority),

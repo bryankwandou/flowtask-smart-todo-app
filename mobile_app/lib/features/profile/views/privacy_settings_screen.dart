@@ -91,7 +91,7 @@ class PrivacySettingsScreen extends StatelessWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: const TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+          style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
         ),
         const SizedBox(height: 16),
         Container(
@@ -119,7 +119,7 @@ class PrivacySettingsScreen extends StatelessWidget {
         child: Icon(icon, color: isDestructive ? AppColors.error : AppColors.primaryLight, size: 22),
       ),
       title: Text(title, style: TextStyle(color: isDestructive ? AppColors.error : Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-      subtitle: Text(sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 13)),
+      subtitle: Text(sub, style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
       trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
     );
   }

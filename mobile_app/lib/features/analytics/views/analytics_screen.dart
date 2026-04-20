@@ -108,7 +108,7 @@ class AnalyticsScreen extends ConsumerWidget {
                   getTitlesWidget: (val, _) {
                     const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                     if (val.toInt() >= 0 && val.toInt() < 7) {
-                      return Text(days[val.toInt()], style: const TextStyle(color: AppColors.textMuted, fontSize: 12));
+                      return Text(days[val.toInt()], style: TextStyle(color: AppColors.textMuted, fontSize: 12));
                     }
                     return const Text('');
                   },
@@ -214,8 +214,8 @@ class AnalyticsScreen extends ConsumerWidget {
         children: [
           Icon(icon, color: color, size: 18),
           const Spacer(),
-          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
         ],
       ),
     ).animate().shimmer(duration: 2.seconds, color: Colors.white10);

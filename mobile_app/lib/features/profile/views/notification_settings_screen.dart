@@ -115,7 +115,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2),
+          style: TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2),
         ),
         const SizedBox(height: 16),
         Container(
@@ -154,7 +154,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
           ],
         ],
       ),
-      subtitle: Text(sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+      subtitle: Text(sub, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,

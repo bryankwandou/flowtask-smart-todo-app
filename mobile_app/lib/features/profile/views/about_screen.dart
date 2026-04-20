@@ -51,7 +51,7 @@ class AboutScreen extends StatelessWidget {
                 ),
                 Text(
                   'Version $version ($buildNumber)',
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 14),
                 ),
                 const SizedBox(height: 48),
                 _buildInfoCard(
@@ -115,7 +115,7 @@ class AboutScreen extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: const TextStyle(color: AppColors.primaryLight, fontSize: 12, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+        style: TextStyle(color: AppColors.primaryLight, fontSize: 12, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
       ),
     );
   }
@@ -138,7 +138,7 @@ class AboutScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Infrastructure Transparency'.toUpperCase(),
-                style: const TextStyle(color: AppColors.secondary, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                style: TextStyle(color: AppColors.secondary, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
               ),
             ],
           ),
@@ -166,12 +166,12 @@ class AboutScreen extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: const TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+            style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
           ),
           const SizedBox(height: 8),
           Text(
             content,
-            style: const TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 13),
+            style: TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 13),
           ),
         ],
       ),
@@ -191,7 +191,7 @@ class _TransparencyItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+          Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
           Text(value, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
         ],
       ),

@@ -26,19 +26,19 @@ class AppColors {
   static const Color textMuted = Color(0xFF64748B); // Slate 500
   
   // Custom Gradients for "Premium" UI
-  static const LinearGradient primaryGradient = LinearGradient(
+  static final LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [primary, primaryDark],
   );
 
-  static const LinearGradient successGradient = LinearGradient(
+  static final LinearGradient successGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [secondary, Color(0xFF059669)],
+    colors: [secondary, const Color(0xFF059669)],
   );
 
-  static const LinearGradient surfaceGradient = LinearGradient(
+  static final LinearGradient surfaceGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [surface, background],

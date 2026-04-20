@@ -61,7 +61,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             TextField(
               controller: _descController,
               maxLines: 2,
-              style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
               decoration: const InputDecoration(hintText: 'Add some details (optional)'),
             ),
             
@@ -114,7 +114,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
                   children: [
                     const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.primary),
                     const SizedBox(width: 8),
-                    Text(DateFormat('MMM dd, yyyy').format(_deadline), style: const TextStyle(color: AppColors.textPrimary)),
+                    Text(DateFormat('MMM dd, yyyy').format(_deadline), style: TextStyle(color: AppColors.textPrimary)),
                   ],
                 ),
               ),

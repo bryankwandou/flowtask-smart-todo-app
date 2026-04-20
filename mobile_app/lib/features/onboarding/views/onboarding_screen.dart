@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import '../../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../../../services/auth_service.dart';
 
 class _OnboardingPage {

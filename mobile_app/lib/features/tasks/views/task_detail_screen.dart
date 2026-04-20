@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
 

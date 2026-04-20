@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../../../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {

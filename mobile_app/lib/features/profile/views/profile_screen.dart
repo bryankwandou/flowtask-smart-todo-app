@@ -6,9 +6,9 @@ import 'privacy_settings_screen.dart';
 import '../../auth/providers/auth_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../../../core/providers/settings_provider.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:flowtask/core/theme/app_theme.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

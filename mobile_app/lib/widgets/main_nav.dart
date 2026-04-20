@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../features/tasks/views/home_screen.dart';
 import '../features/analytics/views/analytics_screen.dart';
 import '../features/profile/views/profile_screen.dart';
-import '../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 
 class MainNavWrapper extends StatefulWidget {
   const MainNavWrapper({super.key});

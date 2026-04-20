@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:ui';
-import '../../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../providers/focus_provider.dart';
 
 class FocusTimerScreen extends ConsumerStatefulWidget {

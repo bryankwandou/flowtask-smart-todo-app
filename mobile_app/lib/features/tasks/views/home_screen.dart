@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:confetti/confetti.dart';
-import '../../../core/theme/colors.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import '../../../widgets/shimmer_loading.dart';
 import '../providers/task_provider.dart';
 import '../../../widgets/sheets/task_creation_sheet.dart';

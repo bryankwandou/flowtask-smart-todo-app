@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter/services.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flowtask/core/theme/colors.dart';
 import '../../../services/auth_service.dart';
 
@@ -87,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       center: const Alignment(0, -0.3),
                       radius: 0.8,
                       colors: [
-                        _pages[_currentIndex].accentColor.withOpacity(0.12),
+                        _pages[_currentIndex].accentColor.withValues(alpha: 0.12),
                         Colors.transparent,
                       ],
                     ),
@@ -160,7 +159,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: _pages[_currentIndex].accentColor
-                                  .withOpacity(0.4),
+                                  .withValues(alpha: 0.4),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
@@ -251,7 +250,7 @@ class _OnboardingPageWidget extends StatelessWidget {
               page.tag.contains('TASK') ? Icons.task_alt_rounded :
               page.tag.contains('FOCUS') ? Icons.timer_outlined : Icons.insights_rounded,
               size: 160,
-              color: page.accentColor.withOpacity(0.8),
+              color: page.accentColor.withValues(alpha: 0.8),
             )
             .animate(onPlay: (controller) => controller.repeat(reverse: true))
             .scale(duration: 2.seconds, begin: const Offset(0.9, 0.9), end: const Offset(1.1, 1.1), curve: Curves.easeInOutQuad)
@@ -266,10 +265,10 @@ class _OnboardingPageWidget extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
-              color: page.accentColor.withOpacity(0.15),
+              color: page.accentColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: page.accentColor.withOpacity(0.3),
+                color: page.accentColor.withValues(alpha: 0.3),
               ),
             ),
             child: Text(
@@ -313,4 +312,5 @@ class _OnboardingPageWidget extends StatelessWidget {
     );
   }
 }
+
 

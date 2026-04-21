@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'privacy_settings_screen.dart';
 import '../../auth/providers/auth_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +14,6 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authRepository = ref.watch(authRepositoryProvider);
     final user = ref.watch(userProvider).value;
     final settings = ref.watch(settingsProvider);
 
@@ -24,10 +22,10 @@ class ProfileScreen extends ConsumerWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverAppBar.large(
+          const SliverAppBar.large(
             expandedHeight: 150,
             backgroundColor: AppColors.background,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
               title: Text('Account', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
               centerTitle: false,
               titlePadding: EdgeInsets.only(left: 20, bottom: 20),
@@ -43,14 +41,14 @@ class ProfileScreen extends ConsumerWidget {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [AppColors.surface, AppColors.surface.withOpacity(0.8)],
+                        colors: [AppColors.surface, AppColors.surface.withValues(alpha: 0.8)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(32),
                       border: Border.all(color: Colors.white10),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black26, blurRadius: 20, offset: const Offset(0, 10))
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black26, blurRadius: 20, offset: Offset(0, 10))
                       ],
                     ),
                     child: Column(
@@ -65,7 +63,7 @@ class ProfileScreen extends ConsumerWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.surface,
-                                  border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 2),
+                                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 2),
                                 ),
                                 child: const Center(
                                   child: Icon(Icons.person_rounded, size: 48, color: AppColors.primaryLight),
@@ -78,7 +76,7 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                               Text(
                                 user?.email ?? 'premium@flowtask.app',
-                                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                               ),
                               const SizedBox(height: 24),
                               _buildProBadge(context, settings.isFounderPass),
@@ -192,7 +190,7 @@ class ProfileScreen extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 4, bottom: 12),
         child: Text(
           title.toUpperCase(),
-          style: TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+          style: const TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1.5),
         ),
       ),
     );
@@ -202,7 +200,7 @@ class ProfileScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.5),
+        color: AppColors.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white10),
       ),
@@ -213,7 +211,7 @@ class ProfileScreen extends ConsumerWidget {
           child: Icon(icon, color: AppColors.primaryLight, size: 22),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-        subtitle: Text(subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+        subtitle: Text(subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
         trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
         onTap: onTap,
       ),
@@ -245,7 +243,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.amber.withOpacity(0.3), blurRadius: 15, spreadRadius: 1)
+          BoxShadow(color: Colors.amber.withValues(alpha: 0.3), blurRadius: 15, spreadRadius: 1)
         ],
       ),
       child: const Row(
@@ -256,23 +254,6 @@ class ProfileScreen extends ConsumerWidget {
           Text('FLOW MASTER PRO', style: TextStyle(color: Color(0xFF422006), fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 1.2)),
         ],
       ),
-    );
-  }
-
-  void _showAboutDialog(BuildContext context) {
-    showAboutDialog(
-      context: context,
-      applicationName: 'FlowTask',
-      applicationVersion: '1.0.9+28',
-      applicationLegalese: '© 2026 nayrbryanGaming. All rights reserved.',
-      applicationIcon: const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 48),
-      children: [
-        const SizedBox(height: 24),
-        const Text(
-          'FlowTask is a personal productivity intelligence tool designed to help you organize chaos into focused progress.',
-          style: TextStyle(fontSize: 14),
-        ),
-      ],
     );
   }
 
@@ -366,4 +347,5 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 }
+
 

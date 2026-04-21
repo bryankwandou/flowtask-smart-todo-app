@@ -22,7 +22,7 @@ class PermissionPrimingScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -67,7 +67,7 @@ class PermissionPrimingScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     elevation: 10,
-                    shadowColor: AppColors.primary.withOpacity(0.3),
+                    shadowColor: AppColors.primary.withValues(alpha: 0.3),
                   ),
                   child: const Text(
                     'ENABLE REMINDERS',
@@ -104,3 +104,4 @@ class PermissionPrimingScreen extends StatelessWidget {
     }
   }
 }
+

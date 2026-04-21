@@ -218,3 +218,4 @@ class AppTransitionPage extends CustomTransitionPage<void> {
          transitionDuration: const Duration(milliseconds: 300),
        );
 }
+

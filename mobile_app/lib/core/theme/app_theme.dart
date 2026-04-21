@@ -18,8 +18,6 @@ class AppTheme {
         onSecondary: Colors.white,
         surface: AppColors.surface,
         onSurface: AppColors.textPrimary,
-        background: AppColors.background,
-        onBackground: AppColors.textPrimary,
         error: AppColors.error,
         onError: Colors.white,
       ),
@@ -38,16 +36,16 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withOpacity(0.03),
+        fillColor: Colors.white.withValues(alpha: 0.03),
         hintStyle: const TextStyle(color: AppColors.textMuted),
         contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.05)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
@@ -56,11 +54,11 @@ class AppTheme {
       ),
 
       cardTheme: CardThemeData(
-        color: Colors.white.withOpacity(0.02),
+        color: Colors.white.withValues(alpha: 0.02),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
-          side: BorderSide(color: Colors.white.withOpacity(0.08), width: 1),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.08), width: 1),
         ),
       ),
 
@@ -103,3 +101,4 @@ class _PaletteColors {
   final Color secondary;
   const _PaletteColors({required this.primary, required this.secondary});
 }
+

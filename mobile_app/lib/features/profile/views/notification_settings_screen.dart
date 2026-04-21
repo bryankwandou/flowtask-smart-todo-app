@@ -86,17 +86,17 @@ class NotificationSettingsScreen extends ConsumerWidget {
                   gradient: AppColors.primaryGradient,
                   borderRadius: BorderRadius.circular(24),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(Icons.bolt_rounded, color: Colors.amber, size: 32),
-                    const SizedBox(width: 20),
+                    Icon(Icons.bolt_rounded, color: Colors.amber, size: 32),
+                    SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Unlock IQ Notifications', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                          const SizedBox(height: 4),
-                          const Text('Get morning briefings and peak hour insights with Pro.', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                          Text('Unlock IQ Notifications', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                          SizedBox(height: 4),
+                          Text('Get morning briefings and peak hour insights with Pro.', style: TextStyle(color: Colors.white70, fontSize: 12)),
                         ],
                       ),
                     ),
@@ -115,12 +115,12 @@ class NotificationSettingsScreen extends ConsumerWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2),
+          style: const TextStyle(color: AppColors.primaryLight, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2),
         ),
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.surface.withOpacity(0.5),
+            color: AppColors.surface.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(color: Colors.white10),
           ),
@@ -148,18 +148,19 @@ class NotificationSettingsScreen extends ConsumerWidget {
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(color: Colors.amber.withOpacity(0.2), borderRadius: BorderRadius.circular(4)),
+              decoration: BoxDecoration(color: Colors.amber.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(4)),
               child: const Text('PRO', style: TextStyle(color: Colors.amber, fontSize: 8, fontWeight: FontWeight.bold)),
             ),
           ],
         ],
       ),
-      subtitle: Text(sub, style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+      subtitle: Text(sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
-        activeColor: AppColors.primaryLight,
+        activeTrackColor: AppColors.primaryLight,
       ),
     );
   }
 }
+

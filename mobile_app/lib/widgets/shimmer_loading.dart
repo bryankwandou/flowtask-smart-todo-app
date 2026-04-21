@@ -49,15 +49,15 @@ class ShimmerTaskList extends StatelessWidget {
       itemCount: 5,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+        return const Padding(
+          padding: EdgeInsets.only(bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ShimmerLoading.rectangular(height: 100),
-              const SizedBox(height: 8),
+              ShimmerLoading.rectangular(height: 100),
+              SizedBox(height: 8),
               Row(
-                children: const [
+                children: [
                   ShimmerLoading.circular(width: 40, height: 20),
                   SizedBox(width: 8),
                   ShimmerLoading.circular(width: 60, height: 20),
@@ -70,3 +70,4 @@ class ShimmerTaskList extends StatelessWidget {
     );
   }
 }
+

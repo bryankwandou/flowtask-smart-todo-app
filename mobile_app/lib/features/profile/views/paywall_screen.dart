@@ -30,7 +30,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.15),
+                color: AppColors.primary.withValues(alpha: 0.15),
               ),
             ).animate().fadeIn(duration: 1000.ms).scale(begin: const Offset(0.5, 0.5)),
           ),
@@ -58,7 +58,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                             shape: BoxShape.circle,
                             gradient: AppColors.primaryGradient,
                             boxShadow: [
-                              BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 30, spreadRadius: 5)
+                              BoxShadow(color: AppColors.primary.withValues(alpha: 0.5), blurRadius: 30, spreadRadius: 5)
                             ],
                           ),
                           child: const Icon(Icons.bolt_rounded, size: 60, color: Colors.white),
@@ -87,15 +87,15 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           decoration: BoxDecoration(
                             color: AppColors.surface,
                             borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.5), width: 2),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 2),
                           ),
-                          child: Column(
+                          child: const Column(
                             children: [
-                              const Text('FOUNDER\'S ALPHA', style: TextStyle(color: AppColors.primaryLight, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 2)),
-                              const SizedBox(height: 12),
-                              const Text('FREE ACCESS', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
-                              const SizedBox(height: 4),
-                              const Text('Limited to first 10,000 members', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                              Text('FOUNDER\'S ALPHA', style: TextStyle(color: AppColors.primaryLight, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 2)),
+                              SizedBox(height: 12),
+                              Text('FREE ACCESS', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                              SizedBox(height: 4),
+                              Text('Limited to first 10,000 members', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
                             ],
                           ),
                         ).animate().fadeIn(delay: 600.ms).scale(begin: const Offset(0.9, 0.9)),
@@ -181,7 +181,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
             child: Icon(icon, color: AppColors.primaryLight, size: 24),
           ),
           const SizedBox(width: 20),
@@ -191,7 +191,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               children: [
                 Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                 const SizedBox(height: 4),
-                Text(subtitle, style: TextStyle(color: AppColors.textMuted, fontSize: 14)),
+                Text(subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 14)),
               ],
             ),
           ),
@@ -200,3 +200,4 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0);
   }
 }
+

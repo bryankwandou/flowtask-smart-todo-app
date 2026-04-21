@@ -99,9 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
               // Form
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.02),
+                  color: Colors.white.withValues(alpha: 0.02),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                 ),
                 padding: const EdgeInsets.all(24),
                 child: Column(
@@ -164,8 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 32),
               
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Expanded(child: Divider(color: Colors.white10)),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -222,3 +222,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+

@@ -3,13 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flowtask/core/theme/colors.dart';
 import '../../../widgets/shimmer_loading.dart';
 import '../providers/task_provider.dart';
 import '../../../widgets/sheets/task_creation_sheet.dart';
-import '../../focus/views/focus_timer_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../../analytics/providers/analytics_provider.dart';
 import '../models/task_model.dart';
@@ -91,7 +89,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           height: 200,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.primary.withOpacity(0.1),
+                            color: AppColors.primary.withValues(alpha: 0.1),
                           ),
                         ).animate().scale(duration: 2.seconds, curve: Curves.easeInOut),
                       ),
@@ -124,10 +122,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             style: const TextStyle(color: Colors.white, fontSize: 14),
                             decoration: InputDecoration(
                               hintText: 'Search your flow...',
-                              hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
-                              prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withOpacity(0.3), size: 18),
+                              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
+                              prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withValues(alpha: 0.3), size: 18),
                               filled: true,
-                              fillColor: Colors.white.withOpacity(0.05),
+                              fillColor: Colors.white.withValues(alpha: 0.05),
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                             ),
@@ -190,7 +188,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.05),
+                            color: AppColors.primary.withValues(alpha: 0.05),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(Icons.auto_awesome_rounded, size: 64, color: AppColors.primaryLight),
@@ -206,7 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Text(
                           _searchQuery.isEmpty ? 'Tap the pulse button to capture your next goal.' : 'Try adjusting your frequency filters.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.textMuted)
+                          style: const TextStyle(color: AppColors.textMuted)
                         ),
                       ],
                     ).animate().fadeIn(duration: 800.ms),
@@ -258,8 +256,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       label: Text(label, style: TextStyle(fontSize: 12, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
       selected: isSelected,
       onSelected: (val) => setState(() => _filterPriority = val ? priority : null),
-      selectedColor: AppColors.primary.withOpacity(0.2),
-      backgroundColor: Colors.white.withOpacity(0.05),
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
+      backgroundColor: Colors.white.withValues(alpha: 0.05),
       labelStyle: TextStyle(color: isSelected ? AppColors.primaryLight : Colors.white70),
       side: BorderSide(color: isSelected ? AppColors.primary : Colors.transparent),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -313,7 +311,7 @@ class _TaskCard extends ConsumerWidget {
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 24),
           decoration: BoxDecoration(
-            color: AppColors.error.withOpacity(0.8),
+            color: AppColors.error.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(24),
           ),
           child: const Icon(Icons.delete_sweep_rounded, color: Colors.white, size: 28),
@@ -329,15 +327,15 @@ class _TaskCard extends ConsumerWidget {
             curve: Curves.easeOutCubic,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: isCompleted ? Colors.white.withOpacity(0.02) : Colors.white.withOpacity(0.05),
+              color: isCompleted ? Colors.white.withValues(alpha: 0.02) : Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(32),
               border: Border.all(
-                color: isCompleted ? Colors.white.withOpacity(0.05) : Colors.white.withOpacity(0.12), 
+                color: isCompleted ? Colors.white.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.12), 
                 width: 1
               ),
               boxShadow: isCompleted ? [] : [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10)
                 )
@@ -392,7 +390,7 @@ class _TaskCard extends ConsumerWidget {
                           const SizedBox(width: 4),
                           Text(
                             DateFormat('h:mm a').format(task.deadline), 
-                            style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
+                            style: const TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
                           ),
                           const SizedBox(width: 16),
                           _PriorityBadge(priority: task.priority),
@@ -434,9 +432,9 @@ class _PriorityBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1), 
+        color: color.withValues(alpha: 0.1), 
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2), width: 0.5),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 0.5),
       ),
       child: Text(
         label, 
@@ -445,4 +443,5 @@ class _PriorityBadge extends StatelessWidget {
     );
   }
 }
+
 

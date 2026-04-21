@@ -91,7 +91,7 @@ class PrivacySettingsScreen extends StatelessWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+          style: const TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
         ),
         const SizedBox(height: 16),
         Container(
@@ -113,13 +113,13 @@ class PrivacySettingsScreen extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isDestructive ? AppColors.error.withOpacity(0.1) : AppColors.primary.withOpacity(0.1),
+          color: isDestructive ? AppColors.error.withValues(alpha: 0.1) : AppColors.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(icon, color: isDestructive ? AppColors.error : AppColors.primaryLight, size: 22),
       ),
       title: Text(title, style: TextStyle(color: isDestructive ? AppColors.error : Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-      subtitle: Text(sub, style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
+      subtitle: Text(sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 13)),
       trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
     );
   }
@@ -235,9 +235,9 @@ class PrivacySettingsScreen extends StatelessWidget {
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Password',
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+                  hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.05),
+                  fillColor: Colors.white.withValues(alpha: 0.05),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                 ),
               ),
@@ -288,4 +288,5 @@ class PrivacySettingsScreen extends StatelessWidget {
     );
   }
 }
+
 

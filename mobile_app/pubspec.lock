@@ -37,10 +37,10 @@ packages:
     dependency: "direct main"
     description:
       name: awesome_notifications
-      sha256: d9e46ce7f5171ee1e9b1c5bc6dc40bd77528561f592842ce97ce3a0a9ae155ef
+      sha256: fb4d5d6effd904720cbc85cfbe796da35f6b0ff079c0798c1a387616200bd80c
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3+1"
+    version: "0.11.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -1102,10 +1102,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "45caa6c5917fa127b5dbcfbd1fa60b14e583afdc08bfc96dda38886ca252eb60"
+      sha256: "046d3928e16fa4dc46e8350415661755ab759d9fc97fc21b5ab295f71e4f0499"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.2"
+    version: "15.1.0"
   web:
     dependency: transitive
     description:

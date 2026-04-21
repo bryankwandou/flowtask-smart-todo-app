@@ -11,3 +11,4 @@ class AppConstants {
   static const String themeKey = 'isDarkMode';
   static const String tokenKey = 'authToken';
 }
+

@@ -61,7 +61,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             TextField(
               controller: _descController,
               maxLines: 2,
-              style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+              style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
               decoration: const InputDecoration(hintText: 'Add some details (optional)'),
             ),
             
@@ -114,7 +114,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
                   children: [
                     const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.primary),
                     const SizedBox(width: 8),
-                    Text(DateFormat('MMM dd, yyyy').format(_deadline), style: TextStyle(color: AppColors.textPrimary)),
+                    Text(DateFormat('MMM dd, yyyy').format(_deadline), style: const TextStyle(color: AppColors.textPrimary)),
                   ],
                 ),
               ),
@@ -168,7 +168,7 @@ class _PrioritySelector extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : Colors.transparent,
+          color: isSelected ? color.withValues(alpha: 0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: isSelected ? color : Colors.white10),
         ),
@@ -184,3 +184,4 @@ class _PrioritySelector extends StatelessWidget {
     );
   }
 }
+

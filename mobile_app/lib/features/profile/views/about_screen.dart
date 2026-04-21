@@ -35,7 +35,7 @@ class AboutScreen extends StatelessWidget {
                       gradient: AppColors.primaryGradient,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         )
@@ -51,7 +51,7 @@ class AboutScreen extends StatelessWidget {
                 ),
                 Text(
                   'Version $version ($buildNumber)',
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
                 ),
                 const SizedBox(height: 48),
                 _buildInfoCard(
@@ -115,7 +115,7 @@ class AboutScreen extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: TextStyle(color: AppColors.primaryLight, fontSize: 12, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+        style: const TextStyle(color: AppColors.primaryLight, fontSize: 12, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
       ),
     );
   }
@@ -125,9 +125,9 @@ class AboutScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withOpacity(0.05),
+        color: AppColors.secondary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.secondary.withOpacity(0.15)),
+        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +138,7 @@ class AboutScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'Infrastructure Transparency'.toUpperCase(),
-                style: TextStyle(color: AppColors.secondary, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                style: const TextStyle(color: AppColors.secondary, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
               ),
             ],
           ),
@@ -157,21 +157,21 @@ class AboutScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title.toUpperCase(),
-            style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+            style: const TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5),
           ),
           const SizedBox(height: 8),
           Text(
             content,
-            style: TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 13),
+            style: const TextStyle(color: AppColors.textSecondary, height: 1.5, fontSize: 13),
           ),
         ],
       ),
@@ -191,11 +191,12 @@ class _TransparencyItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
+          Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
           Text(value, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 }
+
 

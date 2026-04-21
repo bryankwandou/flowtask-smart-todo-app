@@ -56,3 +56,4 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get language => 'Bahasa';
 }
+

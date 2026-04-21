@@ -78,7 +78,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -129,7 +129,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.2 * pulseValue),
+                                  color: AppColors.primary.withValues(alpha: 0.2 * pulseValue),
                                   blurRadius: 40 * pulseValue,
                                   spreadRadius: 10 * pulseValue,
                                 ),
@@ -151,7 +151,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
                                   ),
                                   Text(
                                     focus.status == FocusState.completed ? 'FINISHED' : (focus.status == FocusState.initial ? 'PRESET' : 'REMAINING'),
-                                    style: TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
+                                    style: const TextStyle(color: AppColors.textMuted, letterSpacing: 2, fontSize: 13),
                                   ),
                                 ],
                               ),
@@ -225,7 +225,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
                                 Navigator.pop(context);
                               },
                               icon: Icons.stop_rounded,
-                              color: AppColors.error.withOpacity(0.2),
+                              color: AppColors.error.withValues(alpha: 0.2),
                               iconColor: AppColors.error,
                             ),
                           ]
@@ -253,7 +253,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
           setState(() => _selectedDurationMinutes = minutes);
         }
       },
-      selectedColor: AppColors.primary.withOpacity(0.2),
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
       backgroundColor: AppColors.surface,
       labelStyle: TextStyle(color: isSelected ? AppColors.primaryLight : AppColors.textMuted),
       side: BorderSide(color: isSelected ? AppColors.primary : Colors.white10),
@@ -297,4 +297,5 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }
+
 

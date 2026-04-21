@@ -60,7 +60,7 @@ class AnalyticsScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           )
@@ -74,7 +74,7 @@ class AnalyticsScreen extends ConsumerWidget {
             children: [
               const Text('Current Streak', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
-              Text('${streak.toString().padLeft(2, '0')} Days', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
+              Text('${streak.toString().padLeft(2, '0')} Days', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
             ],
           ),
           Container(
@@ -108,7 +108,7 @@ class AnalyticsScreen extends ConsumerWidget {
                   getTitlesWidget: (val, _) {
                     const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
                     if (val.toInt() >= 0 && val.toInt() < 7) {
-                      return Text(days[val.toInt()], style: TextStyle(color: AppColors.textMuted, fontSize: 12));
+                      return Text(days[val.toInt()], style: const TextStyle(color: AppColors.textMuted, fontSize: 12));
                     }
                     return const Text('');
                   },
@@ -132,7 +132,7 @@ class AnalyticsScreen extends ConsumerWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [AppColors.primary.withOpacity(0.2), Colors.transparent],
+                    colors: [AppColors.primary.withValues(alpha: 0.2), Colors.transparent],
                   ),
                 ),
               ),
@@ -171,12 +171,12 @@ class AnalyticsScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [AppColors.primary.withOpacity(0.1), AppColors.secondary.withOpacity(0.05)],
+                  colors: [AppColors.primary.withValues(alpha: 0.1), AppColors.secondary.withValues(alpha: 0.05)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
               ),
               child: Row(
                 children: [
@@ -214,8 +214,8 @@ class AnalyticsScreen extends ConsumerWidget {
         children: [
           Icon(icon, color: color, size: 18),
           const Spacer(),
-          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-          Text(label, style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
+          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
         ],
       ),
     ).animate().shimmer(duration: 2.seconds, color: Colors.white10);
@@ -245,9 +245,9 @@ class AnalyticsScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [AppColors.secondary.withOpacity(0.1), Colors.transparent]),
+        gradient: LinearGradient(colors: [AppColors.secondary.withValues(alpha: 0.1), Colors.transparent]),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.secondary.withOpacity(0.2)),
+        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +262,7 @@ class AnalyticsScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             'Your productivity typically peaks around $peakHour. Schedule your high-priority "Deep Work" tasks during this window for 30% higher efficiency.',
-            style: TextStyle(color: AppColors.textPrimary.withOpacity(0.8), height: 1.5),
+            style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.8), height: 1.5),
           ),
         ],
       ),
@@ -276,3 +276,4 @@ class AnalyticsScreen extends ConsumerWidget {
     );
   }
 }
+

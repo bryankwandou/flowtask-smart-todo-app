@@ -81,9 +81,9 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isCompleted ? AppColors.secondary.withOpacity(0.1) : AppColors.primary.withOpacity(0.1),
+                    color: isCompleted ? AppColors.secondary.withValues(alpha: 0.1) : AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: isCompleted ? AppColors.secondary.withOpacity(0.3) : AppColors.primary.withOpacity(0.3)),
+                    border: Border.all(color: isCompleted ? AppColors.secondary.withValues(alpha: 0.3) : AppColors.primary.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -118,7 +118,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                 
                 Text(
                   taskState.description.isEmpty ? 'No detailed transmission provided for this node.' : taskState.description,
-                  style: TextStyle(fontSize: 17, color: AppColors.textSecondary, height: 1.6),
+                  style: const TextStyle(fontSize: 17, color: AppColors.textSecondary, height: 1.6),
                 ).animate().fadeIn(delay: 400.ms),
                 
                 const SizedBox(height: 56),
@@ -148,7 +148,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
                   minimumSize: const Size(double.infinity, 68),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
                   elevation: isCompleted ? 0 : 12,
-                  shadowColor: AppColors.primary.withOpacity(0.4),
+                  shadowColor: AppColors.primary.withValues(alpha: 0.4),
                 ),
                 child: Text(
                   isCompleted ? 'RESTORE TO PENDING' : 'COMPLETE TRANSMISSION',
@@ -177,9 +177,9 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Column(children: children),
     ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.1, end: 0);
@@ -197,7 +197,7 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
             const SizedBox(height: 6),
             Text(value, style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold)),
           ],
@@ -212,3 +212,4 @@ class _TaskDetailScreenState extends ConsumerState<TaskDetailScreen> {
     return 'Optimized Low';
   }
 }
+

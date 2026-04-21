@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
-import 'package:uuid/uuid.dart';
 import '../../reminders/services/reminder_service.dart';
 import '../../../services/database_service.dart';
 
@@ -72,3 +71,4 @@ class TaskNotifier extends StateNotifier<List<Task>> {
     }
   }
 }
+

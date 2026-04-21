@@ -48,3 +48,4 @@ class ReminderService {
     await AwesomeNotifications().cancelAll();
   }
 }
+

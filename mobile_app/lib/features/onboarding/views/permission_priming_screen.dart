@@ -98,7 +98,7 @@ class PermissionPrimingScreen extends StatelessWidget {
   }
 
   Future<void> _requestPermission(BuildContext context) async {
-    final bool isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
+    await AwesomeNotifications().requestPermissionToSendNotifications();
     if (context.mounted) {
       context.go('/login');
     }

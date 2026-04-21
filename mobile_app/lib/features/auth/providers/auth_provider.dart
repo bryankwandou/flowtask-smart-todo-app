@@ -16,9 +16,8 @@ final userProvider = StreamProvider<User?>((ref) {
 
 class AuthRepository {
   final FirebaseAuth _auth;
-  final FirebaseFirestore _db;
 
-  AuthRepository(this._auth, this._db);
+  AuthRepository(this._auth, FirebaseFirestore db);
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 

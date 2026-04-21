@@ -109,8 +109,8 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(
-                              0.3 + (_pulseController.value * 0.3),
+                            color: AppColors.primary.withValues(
+                              alpha: 0.3 + (_pulseController.value * 0.3),
                             ),
                             blurRadius: 30 + (_pulseController.value * 20),
                             spreadRadius: 0,

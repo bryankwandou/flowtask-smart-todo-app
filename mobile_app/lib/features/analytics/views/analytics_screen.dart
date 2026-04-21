@@ -221,24 +221,6 @@ class AnalyticsScreen extends ConsumerWidget {
     ).animate().shimmer(duration: 2.seconds, color: Colors.white10);
   }
 
-  Widget _buildPatternTile(String label, String value, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: AppColors.textMuted, size: 18),
-          const Spacer(),
-          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-          Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textMuted)),
-        ],
-      ),
-    );
   }
 
   Widget _buildProductivityInsightCard(String peakHour) {

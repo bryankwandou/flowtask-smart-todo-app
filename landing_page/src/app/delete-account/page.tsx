@@ -22,14 +22,14 @@ export default function DeleteAccount() {
           <div className="bg-red-500/10 border border-red-500/20 p-6 rounded-2xl">
             <h2 className="text-red-400 font-bold mb-2">What data will be removed?</h2>
             <ul className="list-disc list-inside text-slate-400 space-y-1 text-sm">
-              <li>Authentication credentials (Email/UID)</li>
+              <li>Local identification data</li>
               <li>Personal productivity analytics and Intelligence IQ records</li>
               <li>Focus session history and heatmaps</li>
               <li>All tasks and pending reminders</li>
             </ul>
           </div>
 
-          <h2 className="text-xl font-bold text-white mt-8">How to delete your account:</h2>
+          <h2 className="text-xl font-bold text-white mt-8">How to delete your data:</h2>
           
           <div className="space-y-4">
             <div className="flex gap-4">
@@ -38,17 +38,17 @@ export default function DeleteAccount() {
             </div>
             <div className="flex gap-4">
                <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold shrink-0">2</div>
-               <p className="text-slate-400">Navigate to the <strong>Account (Profile)</strong> tab.</p>
+               <p className="text-slate-400">Navigate to the <strong>Profile &gt; Settings</strong> menu.</p>
             </div>
             <div className="flex gap-4">
                <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold shrink-0">3</div>
-               <p className="text-slate-400">Scroll down and tap on <strong>"Delete Account"</strong>.</p>
+               <p className="text-slate-400">Tap on <strong>"Wipe Local Data"</strong> or <strong>"Delete Account"</strong> to purge all information from your device.</p>
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-white mt-8">Prefer manual deletion?</h2>
+          <h2 className="text-xl font-bold text-white mt-8">Privacy Notice</h2>
           <p className="text-slate-400">
-            If you no longer have access to the app, please email our support team at <a href="mailto:support@flowtask.app" className="text-indigo-400 hover:underline">support@flowtask.app</a> with the subject "Account Deletion Request". Include the email address associated with your account. We will process your request within 48 hours.
+            FlowTask operates as a 100% offline application. We do not store your data on our servers, so your data is effectively "deleted" from our system by virtue of it never being there in the first place.
           </p>
 
           <Link href="/" className="inline-block mt-8 bg-slate-800 hover:bg-slate-700 text-white px-8 py-3 rounded-full font-bold transition-all border border-white/5">
@@ -58,7 +58,7 @@ export default function DeleteAccount() {
       </div>
       
       <p className="mt-12 text-slate-600 text-sm">
-        Managed by Google Firebase Infrastructure Security.
+        Secure Local-First Data Architecture.
       </p>
     </div>
   );

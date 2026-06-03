@@ -1,14 +1,10 @@
+import 'package:equatable/equatable.dart';
+import 'package:flowtask/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flowtask/core/theme/app_theme.dart';
 
 class SettingsState extends Equatable {
-  final ThemePalette palette;
-  final Locale locale;
-  final bool notificationsEnabled;
-  final bool isFounderPass;
 
   const SettingsState({
     this.palette = ThemePalette.indigo,
@@ -16,6 +12,10 @@ class SettingsState extends Equatable {
     this.notificationsEnabled = true,
     this.isFounderPass = false,
   });
+  final ThemePalette palette;
+  final Locale locale;
+  final bool notificationsEnabled;
+  final bool isFounderPass;
 
   SettingsState copyWith({
     ThemePalette? palette,
@@ -36,11 +36,11 @@ class SettingsState extends Equatable {
 }
 
 class SettingsNotifier extends StateNotifier<SettingsState> {
-  static const String _founderKey = 'is_founder_pass';
 
   SettingsNotifier() : super(const SettingsState()) {
     _loadSettings();
   }
+  static const String _founderKey = 'is_founder_pass';
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();

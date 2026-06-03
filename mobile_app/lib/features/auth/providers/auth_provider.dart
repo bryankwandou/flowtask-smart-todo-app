@@ -1,41 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../services/auth_service.dart';
 
-final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
-final firestoreProvider = Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
+// Simple model for local user
+class LocalUser {
+  final String email;
+  LocalUser({required this.email});
+}
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepository(ref.watch(firebaseAuthProvider), ref.watch(firestoreProvider));
+  return AuthRepository();
 });
 
-final userProvider = StreamProvider<User?>((ref) {
-  return ref.watch(authRepositoryProvider).authStateChanges;
+final userProvider = StateProvider<LocalUser?>((ref) {
+  return null; // Initial state
 });
 
 class AuthRepository {
-  final FirebaseAuth _auth;
+  Future<bool> isLoggedIn() => AuthService.isLoggedIn();
 
-  AuthRepository(this._auth, FirebaseFirestore db);
+  Future<void> login(String email, String password) async {
+    await AuthService.login(email, password);
+  }
 
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  Future<void> register(String email, String password) async {
+    await AuthService.register(email, password);
+  }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    await AuthService.logout();
   }
 
-  /// CRITICAL FOR PLAY STORE COMPLIANCE: 
-  /// Deletes all user data (Firestore, Reminders, and Auth).
-  /// Note: Prefers using AuthService for re-authentication security.
-  Future<void> deleteAccount({String? password}) async {
-    if (password != null) {
-      await AuthService.deleteAccount(password);
-    } else {
-      // Fallback for flows without direct password input (e.g. recent login)
-      // BUT we should really always use the password flow for security.
-      throw Exception('Re-authentication required. Please use the Security settings to delete your account.');
-    }
+  Future<void> deleteAccount(String password) async {
+    await AuthService.deleteAccount(password);
   }
 }
-

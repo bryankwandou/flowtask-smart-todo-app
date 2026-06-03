@@ -1,14 +1,14 @@
 class AppConstants {
   static const String appName = 'FlowTask';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.0.9+18';
   
-  // Firebase Collection Names
-  static const String usersCollection = 'users';
-  static const String tasksCollection = 'tasks';
-  static const String statsCollection = 'productivity_stats';
+  // Local Database Table Names
+  static const String usersTable = 'users';
+  static const String tasksTable = 'tasks';
+  static const String statsTable = 'productivity_stats';
   
-  // Shared Prefs Keys
-  static const String themeKey = 'isDarkMode';
-  static const String tokenKey = 'authToken';
+  // Storage Keys
+  static const String themeKey = 'app_theme_palette';
+  static const String localeKey = 'app_locale';
+  static const String userKey = 'local_user_email';
 }
-

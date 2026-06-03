@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flowtask/core/theme/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: const Icon(Icons.bolt_rounded, size: 50, color: Colors.white),
+                    child: const Icon(Icons.check_circle_rounded, size: 50, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -55,8 +55,8 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 48),
                 _buildInfoCard(
-                  'Founder Alpha Status',
-                  'FlowTask is currently in Early Access. Founders receive exclusive access to all premium intelligence features during this launch phase.',
+                  'Platinum Production Status',
+                  'FlowTask is now in Stable Production. This Platinum build includes the full suite of cognitive intelligence features and localized focus optimizations.',
                 ),
                 const SizedBox(height: 16),
                 _buildInfoCard(
@@ -65,34 +65,14 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildInfoCard(
-                  'Legal & Compliance',
-                  'FlowTask prioritizes User Data Sovereignty. Our infrastructure is secured via Google Firebase and complies with 2024 global Data Safety mandates.',
+                  'Privacy & Sovereignty',
+                  'FlowTask is built on a Zero-Cloud architecture. Your data is encrypted and stored exclusively on this device. We do not collect, share, or sell any user information.',
                 ),
                 const SizedBox(height: 16),
                 _buildTransparencyCard(),
-                const SizedBox(height: 32),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildTextLink('Privacy', () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy')),
-                    const SizedBox(width: 12),
-                    const Text('|', style: TextStyle(color: Colors.white10)),
-                    const SizedBox(width: 12),
-                    _buildTextLink('Data Safety', () => _launchURL('https://flowtask-smart-todo-app.vercel.app/data-safety')),
-                    const SizedBox(width: 12),
-                    const Text('|', style: TextStyle(color: Colors.white10)),
-                    const SizedBox(width: 12),
-                    _buildTextLink('Disclaimer', () => _launchURL('https://flowtask-smart-todo-app.vercel.app/disclaimer')),
-                    const SizedBox(width: 12),
-                    const Text('|', style: TextStyle(color: Colors.white10)),
-                    const SizedBox(width: 12),
-                    _buildTextLink('Terms', () => _launchURL('https://flowtask-smart-todo-app.vercel.app/terms')),
-                  ],
-                ),
                 const SizedBox(height: 48),
                 const Text(
-                  '© 2026 FlowTask — Built with Purpose.',
+                  '© 2026 FlowTask — Built for Focus.',
                   style: TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -103,31 +83,16 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
-    }
-  }
 
-  Widget _buildTextLink(String label, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Text(
-        label,
-        style: const TextStyle(color: AppColors.primaryLight, fontSize: 12, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-      ),
-    );
-  }
 
   Widget _buildTransparencyCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withValues(alpha: 0.05),
+        color: AppColors.secondary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.15)),
+        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,10 +108,10 @@ class AboutScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const _TransparencyItem(label: 'Encryption', value: 'AES-256 / TLS 1.3'),
-          const _TransparencyItem(label: 'Storage', value: 'Google Firestore (Multi-Region)'),
-          const _TransparencyItem(label: 'Identity', value: 'Firebase Auth (Identity Platform)'),
-          const _TransparencyItem(label: 'Data Deletion', value: 'Instant Shard Purge Supported'),
+          const _TransparencyItem(label: 'Encryption', value: 'AES-256 (On-Device)'),
+          const _TransparencyItem(label: 'Storage', value: 'Offline-First Persistence'),
+          const _TransparencyItem(label: 'Identity', value: 'Local Secure Identity'),
+          const _TransparencyItem(label: 'Data Deletion', value: 'Irreversible Local Purge'),
         ],
       ),
     );
@@ -157,9 +122,9 @@ class AboutScreen extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,9 +145,9 @@ class AboutScreen extends StatelessWidget {
 }
 
 class _TransparencyItem extends StatelessWidget {
+  const _TransparencyItem({required this.label, required this.value});
   final String label;
   final String value;
-  const _TransparencyItem({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {

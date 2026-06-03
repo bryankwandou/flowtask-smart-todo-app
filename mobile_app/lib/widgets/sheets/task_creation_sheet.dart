@@ -1,8 +1,10 @@
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:flowtask/core/theme/colors.dart';
+
 import '../../features/tasks/providers/task_provider.dart';
 
 class TaskCreationSheet extends ConsumerStatefulWidget {
@@ -20,6 +22,8 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
@@ -47,14 +51,14 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
               ),
             ),
             const SizedBox(height: 24),
-            const Text('Create New Task', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+            Text(l10n.newTask, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
             const SizedBox(height: 24),
             
             TextField(
               controller: _titleController,
               autofocus: true,
               style: const TextStyle(fontSize: 18, color: Colors.white),
-              decoration: const InputDecoration(hintText: 'What needs to be done?'),
+              decoration: InputDecoration(hintText: l10n.taskHint),
             ),
             const SizedBox(height: 16),
             
@@ -62,26 +66,26 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
               controller: _descController,
               maxLines: 2,
               style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-              decoration: const InputDecoration(hintText: 'Add some details (optional)'),
+              decoration: InputDecoration(hintText: l10n.detailsHint),
             ),
             
             const SizedBox(height: 24),
-            const Text('Priority', style: TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 1.2)),
+            Text(l10n.priority.toUpperCase(), style: const TextStyle(color: AppColors.textMuted, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 1.2)),
             const SizedBox(height: 12),
             Row(
               children: [
-                _PrioritySelector(label: 'LOW', val: 1, current: _priority, color: AppColors.secondary, onTap: (v) {
-                  HapticFeedback.lightImpact();
+                _PrioritySelector(label: l10n.lowPriority.toUpperCase(), val: 1, current: _priority, color: AppColors.secondary, onTap: (v) async {
+                  await HapticFeedback.lightImpact();
                   setState(() => _priority = v);
                 }),
                 const SizedBox(width: 8),
-                _PrioritySelector(label: 'MEDIUM', val: 2, current: _priority, color: AppColors.warning, onTap: (v) {
-                  HapticFeedback.lightImpact();
+                _PrioritySelector(label: l10n.medPriority.toUpperCase(), val: 2, current: _priority, color: AppColors.warning, onTap: (v) async {
+                  await HapticFeedback.lightImpact();
                   setState(() => _priority = v);
                 }),
                 const SizedBox(width: 8),
-                _PrioritySelector(label: 'HIGH', val: 3, current: _priority, color: AppColors.error, onTap: (v) {
-                  HapticFeedback.selectionClick();
+                _PrioritySelector(label: l10n.highPriority.toUpperCase(), val: 3, current: _priority, color: AppColors.error, onTap: (v) async {
+                  await HapticFeedback.selectionClick();
                   setState(() => _priority = v);
                 }),
               ],
@@ -90,7 +94,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             const SizedBox(height: 24),
             InkWell(
               onTap: () async {
-                  HapticFeedback.selectionClick();
+                  await HapticFeedback.selectionClick();
                   final date = await showDatePicker(
                     context: context,
                     initialDate: _deadline,
@@ -98,7 +102,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   );
                   if (date != null) {
-                    HapticFeedback.lightImpact();
+                    await HapticFeedback.lightImpact();
                     setState(() => _deadline = date);
                   }
               },
@@ -122,16 +126,16 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
             
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_titleController.text.isNotEmpty) {
-                  HapticFeedback.mediumImpact();
-                  ref.read(taskProvider.notifier).addTask(
+                  await HapticFeedback.mediumImpact();
+                  await ref.read(taskProvider.notifier).addTask(
                     _titleController.text,
                     _descController.text,
                     _priority,
                     _deadline,
                   );
-                  Navigator.pop(context);
+                  if (context.mounted) Navigator.pop(context);
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -141,7 +145,7 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: const Text('CREATE TASK', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+              child: Text(l10n.createTask.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
             ),
           ],
         ),
@@ -151,17 +155,17 @@ class _TaskCreationSheetState extends ConsumerState<TaskCreationSheet> {
 }
 
 class _PrioritySelector extends StatelessWidget {
+
+  const _PrioritySelector({required this.label, required this.val, required this.current, required this.color, required this.onTap});
   final String label;
   final int val;
   final int current;
   final Color color;
   final Function(int) onTap;
 
-  const _PrioritySelector({required this.label, required this.val, required this.current, required this.color, required this.onTap});
-
   @override
   Widget build(BuildContext context) {
-    bool isSelected = val == current;
+    final bool isSelected = val == current;
     return GestureDetector(
       onTap: () => onTap(val),
       child: AnimatedContainer(
@@ -184,4 +188,3 @@ class _PrioritySelector extends StatelessWidget {
     );
   }
 }
-

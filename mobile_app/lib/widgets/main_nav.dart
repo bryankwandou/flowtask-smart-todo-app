@@ -1,9 +1,11 @@
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../features/tasks/views/home_screen.dart';
+
 import '../features/analytics/views/analytics_screen.dart';
 import '../features/profile/views/profile_screen.dart';
-import 'package:flowtask/core/theme/colors.dart';
+import '../features/tasks/views/home_screen.dart';
 
 class MainNavWrapper extends StatefulWidget {
   const MainNavWrapper({super.key});
@@ -23,6 +25,8 @@ class _MainNavWrapperState extends State<MainNavWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -46,21 +50,21 @@ class _MainNavWrapperState extends State<MainNavWrapper> {
           showSelectedLabels: true,
           showUnselectedLabels: false,
           elevation: 0,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.check_box_outlined),
-              activeIcon: Icon(Icons.check_box),
-              label: 'Tasks',
+              icon: const Icon(Icons.check_box_outlined),
+              activeIcon: const Icon(Icons.check_box),
+              label: l10n.homeTitle,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined),
-              activeIcon: Icon(Icons.bar_chart),
-              label: 'Analytics',
+              icon: const Icon(Icons.bar_chart_outlined),
+              activeIcon: const Icon(Icons.bar_chart),
+              label: l10n.analyticsTitle,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Profile',
+              icon: const Icon(Icons.person_outline),
+              activeIcon: const Icon(Icons.person),
+              label: l10n.profileTitle,
             ),
           ],
         ),
@@ -68,4 +72,3 @@ class _MainNavWrapperState extends State<MainNavWrapper> {
     );
   }
 }
-

@@ -1,16 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nayrbryan.flowtask">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
-        android:label="FlowTask"
+        android:label="FlowTask Platinum"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -32,11 +29,6 @@
             </intent-filter>
         </activity>
         
-        <!-- Firebase Messaging & Notification Services -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="task_reminders" />
-
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flowtask/core/theme/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -117,9 +118,13 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Image.asset('assets/images/logo.png'),
+                      child: const Center(
+                        child: Image(
+                          image: AssetImage('assets/images/logo.png'),
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     );
                   },
@@ -174,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen>
             left: 0,
             right: 0,
             child: const Text(
-              'v1.0.9+28',
+              'v1.0.9 (Stable Production)',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textMuted, fontSize: 12),
             ).animate().fadeIn(delay: 1000.ms),
@@ -184,4 +189,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-

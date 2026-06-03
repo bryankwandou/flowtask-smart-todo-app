@@ -1,11 +1,8 @@
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flowtask/core/theme/colors.dart';
 
 class ShimmerLoading extends StatelessWidget {
-  final double width;
-  final double height;
-  final ShapeBorder shapeBorder;
 
   const ShimmerLoading.rectangular({
     super.key,
@@ -21,6 +18,9 @@ class ShimmerLoading extends StatelessWidget {
     required this.height,
     this.shapeBorder = const CircleBorder(),
   });
+  final double width;
+  final double height;
+  final ShapeBorder shapeBorder;
 
   @override
   Widget build(BuildContext context) {

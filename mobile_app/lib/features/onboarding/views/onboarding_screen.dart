@@ -1,55 +1,28 @@
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter/services.dart';
-import 'package:flowtask/core/theme/colors.dart';
+
 import '../../../services/auth_service.dart';
 
-class _OnboardingPage {
-  final String tag;
-  final String title;
-  final String subtitle;
-  final String lottieUrl;
-  final Color accentColor;
-  final List<Color> gradientColors;
+class _OnboardingPageData {
 
-  const _OnboardingPage({
+  const _OnboardingPageData({
     required this.tag,
     required this.title,
     required this.subtitle,
-    required this.lottieUrl,
     required this.accentColor,
     required this.gradientColors,
   });
+  final String tag;
+  final String title;
+  final String subtitle;
+  final Color accentColor;
+  final List<Color> gradientColors;
 }
-
-const _pages = [
-  _OnboardingPage(
-    tag: 'TASK INTELLIGENCE',
-    title: 'Tame the Chaos',
-    subtitle: 'Organize every task in a minimalist space engineered for clarity. No clutter, just progress.',
-    lottieUrl: 'https://assets5.lottiefiles.com/private_files/lf30_8np772as.json', // Chaos/Loading
-    accentColor: AppColors.primary,
-    gradientColors: [Color(0xFF6366F1), Color(0xFF4338CA)],
-  ),
-  _OnboardingPage(
-    tag: 'DEEP FOCUS ENGINE',
-    title: 'Find Your Flow',
-    subtitle: 'Launch precision Pomodoro sessions tied to any task. Eliminate distractions. Enter the zone.',
-    lottieUrl: 'https://assets10.lottiefiles.com/packages/lf20_96b9lbay.json', // Rocket/Focus
-    accentColor: Color(0xFF8B5CF6),
-    gradientColors: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
-  ),
-  _OnboardingPage(
-    tag: 'PRODUCTIVITY IQ',
-    title: 'Unlock Your Insights',
-    subtitle: 'Discover your peak performance hours, track streaks, and decode how you work best—automatically.',
-    lottieUrl: 'https://assets10.lottiefiles.com/packages/lf20_qpwb6as6.json', // Charts/Growth
-    accentColor: AppColors.secondary,
-    gradientColors: [Color(0xFF10B981), Color(0xFF059669)],
-  ),
-];
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -68,9 +41,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
+  List<_OnboardingPageData> _getPages(AppLocalizations l10n) {
+    return [
+      _OnboardingPageData(
+        tag: l10n.onboarding1Tag,
+        title: l10n.onboarding1Title,
+        subtitle: l10n.onboarding1Sub,
+        accentColor: AppColors.primary,
+        gradientColors: const [Color(0xFF6366F1), Color(0xFF4338CA)],
+      ),
+      _OnboardingPageData(
+        tag: l10n.onboarding2Tag,
+        title: l10n.onboarding2Title,
+        subtitle: l10n.onboarding2Sub,
+        accentColor: const Color(0xFF8B5CF6),
+        gradientColors: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+      ),
+      _OnboardingPageData(
+        tag: l10n.onboarding3Tag,
+        title: l10n.onboarding3Title,
+        subtitle: l10n.onboarding3Sub,
+        accentColor: AppColors.secondary,
+        gradientColors: const [Color(0xFF10B981), Color(0xFF059669)],
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isLast = _currentIndex == _pages.length - 1;
+    final l10n = AppLocalizations.of(context)!;
+    final pages = _getPages(l10n);
+    final isLast = _currentIndex == pages.length - 1;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -86,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       center: const Alignment(0, -0.3),
                       radius: 0.8,
                       colors: [
-                        _pages[_currentIndex].accentColor.withValues(alpha: 0.12),
+                        pages[_currentIndex].accentColor.withValues(alpha: 0.12),
                         Colors.transparent,
                       ],
                     ),
@@ -107,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       data: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary)),
                       child: TextButton(
                         onPressed: () => _finishOnboarding(context),
-                        child: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+                        child: Text(l10n.skip, style: const TextStyle(fontWeight: FontWeight.w600)),
                       ),
                     ),
                   ),
@@ -117,13 +118,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Expanded(
                   child: PageView.builder(
                     controller: _controller,
-                    itemCount: _pages.length,
+                    itemCount: pages.length,
                     onPageChanged: (index) {
                       HapticFeedback.lightImpact();
                       setState(() => _currentIndex = index);
                     },
                     itemBuilder: (context, index) =>
-                        _OnboardingPageWidget(page: _pages[index]),
+                        _OnboardingPageWidget(page: pages[index]),
                   ),
                 ),
 
@@ -135,9 +136,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       // Page indicator
                       SmoothPageIndicator(
                         controller: _controller,
-                        count: _pages.length,
+                        count: pages.length,
                         effect: ExpandingDotsEffect(
-                          activeDotColor: _pages[_currentIndex].accentColor,
+                          activeDotColor: pages[_currentIndex].accentColor,
                           dotColor: AppColors.surface,
                           dotHeight: 8,
                           dotWidth: 8,
@@ -153,12 +154,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 60,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: _pages[_currentIndex].gradientColors,
+                            colors: pages[_currentIndex].gradientColors,
                           ),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: _pages[_currentIndex].accentColor
+                              color: pages[_currentIndex].accentColor
                                   .withValues(alpha: 0.4),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
@@ -188,8 +189,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 children: [
                                   Text(
                                     isLast
-                                        ? 'Get Started Free'
-                                        : 'Continue',
+                                        ? l10n.getStarted
+                                        : l10n.continueBtn,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -225,7 +226,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _finishOnboarding(BuildContext context) async {
     HapticFeedback.lightImpact();
     await AuthService.markOnboardingDone();
-    if (mounted) {
+    if (context.mounted) {
       context.go('/permission-priming');
     }
   }
@@ -233,8 +234,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class _OnboardingPageWidget extends StatelessWidget {
-  final _OnboardingPage page;
   const _OnboardingPageWidget({required this.page});
+  final _OnboardingPageData page;
 
   @override
   Widget build(BuildContext context) {
@@ -243,12 +244,11 @@ class _OnboardingPageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // High-Tier Native Animation (Zero Network Dependency)
           SizedBox(
             height: 280,
             child: Icon(
-              page.tag.contains('TASK') ? Icons.task_alt_rounded :
-              page.tag.contains('FOCUS') ? Icons.timer_outlined : Icons.insights_rounded,
+              page.tag.contains('TASK') || page.tag.contains('TUGAS') ? Icons.task_alt_rounded :
+              page.tag.contains('FOCUS') || page.tag.contains('FOKUS') ? Icons.timer_outlined : Icons.insights_rounded,
               size: 160,
               color: page.accentColor.withValues(alpha: 0.8),
             )
@@ -312,5 +312,3 @@ class _OnboardingPageWidget extends StatelessWidget {
     );
   }
 }
-
-

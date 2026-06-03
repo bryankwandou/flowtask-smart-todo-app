@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+
 import '../../tasks/providers/task_provider.dart';
 import '../models/stats_model.dart';
-import 'package:intl/intl.dart';
 
 final analyticsProvider = Provider<ProductivityStats>((ref) {
   final tasks = ref.watch(taskProvider);
@@ -16,7 +17,7 @@ final analyticsProvider = Provider<ProductivityStats>((ref) {
 
   // Velocity Calculation (Completed tasks per day for the last 7 days)
   final now = DateTime.now();
-  bool isBaseline = tasks.isEmpty;
+  final bool isBaseline = tasks.isEmpty;
   
   final List<double> weeklyVelocity = List.generate(7, (index) {
     if (isBaseline) {
@@ -35,7 +36,7 @@ final analyticsProvider = Provider<ProductivityStats>((ref) {
   });
 
   // Simple Peak Hour Logic: Hour where most tasks were completed
-  String peakHour = isBaseline ? "Awaiting Data" : "N/A";
+  String peakHour = isBaseline ? 'Awaiting Data' : 'N/A';
   if (completedTasks.isNotEmpty) {
     final hours = completedTasks.map((t) => t.completedAt?.hour ?? 0).toList();
     final mostFrequentHour = hours.fold<Map<int, int>>({}, (acc, curr) {
@@ -84,7 +85,7 @@ final smartTipsProvider = Provider<String>((ref) {
   final stats = ref.watch(analyticsProvider);
   final tasks = ref.watch(taskProvider);
   
-  if (tasks.isEmpty) return "Capture your first task to start generating intelligence insights.";
+  if (tasks.isEmpty) return 'Capture your first task to start generating intelligence insights.';
   
   // Logic Tree for Productivity Strategy
   if (stats.completionRate > 0.8) {
@@ -93,10 +94,10 @@ final smartTipsProvider = Provider<String>((ref) {
 
   final pendingHigh = tasks.where((t) => t.status == 'pending' && t.priority == 3).length;
   if (pendingHigh >= 3) {
-    return "Cognitive Load Alert: You have $pendingHigh high-priority blocks pending. Tackle the smallest one first to break the inertia.";
+    return 'Cognitive Load Alert: You have $pendingHigh high-priority blocks pending. Tackle the smallest one first to break the inertia.';
   }
   
-  if (stats.peakHour != "N/A" && stats.peakHour != "09:00 AM") {
+  if (stats.peakHour != 'N/A' && stats.peakHour != '09:00 AM') {
     return "Golden Window: Your performance spikes around ${stats.peakHour}. Protect this period for your most difficult 'Deep Work' sessions.";
   }
 
@@ -108,6 +109,6 @@ final smartTipsProvider = Provider<String>((ref) {
     return "System Advice: Your backlog is growing. Try the 'Two-Minute Rule'—complete any small tasks immediately to clear cognitive overhead.";
   }
   
-  return "Transmission Active. Complete more nodes to sharpen your Productivity IQ analytics.";
+  return 'Transmission Active. Complete more nodes to sharpen your Productivity IQ analytics.';
 });
 

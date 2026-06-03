@@ -13,8 +13,8 @@ export default function Home() {
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 max-w-7xl mx-auto backdrop-blur-md bg-slate-950/20 sticky top-0 border-b border-white/5">
         <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-all duration-500">
-            <span className="font-bold text-xl text-white">F</span>
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 rotate-3 group-hover:rotate-0 transition-all duration-500">
+            <Image src="/logo.png" alt="FlowTask Logo" width={40} height={40} className="object-cover" />
           </div>
           <span className="font-extrabold text-2xl tracking-tighter text-white">Flow<span className="text-indigo-400">Task</span></span>
         </div>
@@ -37,14 +37,14 @@ export default function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          v1.0.9+28 Hardened — 18th Submission Masterpiece
+          Production Stable v1.0.9
         </div>
         <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-10 leading-[1] text-white">
           Turn Daily Chaos <br/>
           Into <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-emerald-400 to-indigo-400">Focused Progress.</span>
         </h1>
         <p className="text-xl text-slate-400 max-w-3xl mb-12 leading-relaxed font-medium">
-          FlowTask isn't just another to-do list. It's a high-performance productivity intelligence tool powered by Google's global infrastructure.
+          FlowTask isn't just another to-do list. It's a high-performance productivity intelligence tool designed for absolute privacy, 100% offline reliability, and peak speed.
         </p>
         <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
           <button className="bg-white text-indigo-950 text-lg px-10 py-5 rounded-full font-black transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-white/20 flex items-center justify-center gap-3">
@@ -71,8 +71,8 @@ export default function Home() {
                <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">AES Encryption</div>
             </div>
             <div>
-               <div className="text-4xl font-black text-emerald-400 mb-2">&lt;100ms</div>
-               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">Sync Latency</div>
+               <div className="text-4xl font-black text-emerald-400 mb-2">&lt;1ms</div>
+               <div className="text-slate-500 uppercase text-xs font-bold tracking-widest">Local Latency</div>
             </div>
             <div>
                <div className="text-4xl font-black text-white mb-2">24/7</div>
@@ -130,7 +130,7 @@ export default function Home() {
             <TestimonialCard 
               name="Marcus V."
               role="Lead Developer, Stealth Startup"
-              content="Production grade through and through. The Firebase sync is rock solid and the dark mode is the best I've seen in any task app."
+              content="Production grade through and through. The local-only architecture is rock solid and the dark mode is the best I've seen in any task app."
               avatar="👨‍💻"
             />
             <TestimonialCard 
@@ -161,7 +161,7 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-bold mb-4 text-emerald-400">Account Deletion</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">
-                  In compliance with Google Play Store policies, we provide a full, irreversible account and data deletion path. You can delete your account directly through the app settings or by submitting a request below.
+                  In compliance with Google Play Store policies, we provide a full, irreversible data purge path. Since all your data is stored locally, deleting the app or using the "Purge Data" button in settings will immediately destroy all your records from the device.
                 </p>
                 <Link href="/delete-account" className="text-indigo-400 font-bold hover:underline inline-flex items-center gap-2">
                   Go to Deletion Request Form
@@ -173,7 +173,7 @@ export default function Home() {
               <div>
                 <h3 className="text-xl font-bold mb-4 text-indigo-400">Data Usage</h3>
                 <p className="text-slate-400 leading-relaxed font-medium">
-                  FlowTask only collects data essential for syncing your tasks and generating your productivity intelligence reports. We use enterprise-grade Firebase encryption for all user content.
+                  FlowTask only processes data essential for managing your tasks and generating your productivity intelligence reports. All data is stored securely on your device using industry-standard encryption.
                 </p>
                 <ul className="mt-4 space-y-2">
                   <ListItem>No third-party data selling</ListItem>
@@ -189,19 +189,19 @@ export default function Home() {
             <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
               <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Data Collection</h4>
               <ul className="space-y-3 text-slate-500">
-                <li className="flex justify-between"><span>User ID</span> <span className="text-emerald-500 font-mono">Collected</span></li>
-                <li className="flex justify-between"><span>Email</span> <span className="text-emerald-500 font-mono">Collected</span></li>
-                <li className="flex justify-between"><span>Task Content</span> <span className="text-emerald-500 font-mono">Synced</span></li>
-                <li className="flex justify-between"><span>Location</span> <span className="text-rose-500 font-mono">None</span></li>
+                <li className="flex justify-between"><span>User ID</span> <span className="text-indigo-400 font-mono">Local Only</span></li>
+                <li className="flex justify-between"><span>Email</span> <span className="text-indigo-400 font-mono">Local Only</span></li>
+                <li className="flex justify-between"><span>Task Content</span> <span className="text-indigo-400 font-mono">Encrypted</span></li>
+                <li className="flex justify-between"><span>Network</span> <span className="text-rose-500 font-mono">None</span></li>
               </ul>
             </div>
             <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
               <h4 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Security Standards</h4>
               <ul className="space-y-3 text-slate-500">
-                <li className="flex justify-between"><span>Transit</span> <span className="text-white">TLS 1.3</span></li>
+                <li className="flex justify-between"><span>Compute</span> <span className="text-white">On-Device AI</span></li>
                 <li className="flex justify-between"><span>At Rest</span> <span className="text-white">AES-256</span></li>
-                <li className="flex justify-between"><span>Infrastructure</span> <span className="text-white">Google Cloud</span></li>
-                <li className="flex justify-between"><span>Access Control</span> <span className="text-white">IAM / Rules</span></li>
+                <li className="flex justify-between"><span>Infrastructure</span> <span className="text-white">Zero Cloud</span></li>
+                <li className="flex justify-between"><span>Access Control</span> <span className="text-white">Device Lock</span></li>
               </ul>
             </div>
             <div className="p-8 rounded-3xl bg-slate-900/20 border border-white/5">
@@ -256,8 +256,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 text-slate-600 text-sm flex flex-col md:flex-row justify-between items-center font-medium">
           <p>© 2026 FlowTask — Built by individuals who value time.</p>
           <div className="flex gap-8 mt-6 md:mt-0">
-             <span>v1.0.9+28 Platinum</span>
-             <span>Firebase Infrastructure</span>
+             <span>v1.0.9+Platinum</span>
+             <span>Local-First Architecture</span>
           </div>
         </div>
       </footer>

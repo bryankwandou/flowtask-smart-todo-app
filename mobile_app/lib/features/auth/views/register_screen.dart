@@ -1,19 +1,23 @@
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/features/auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flowtask/core/theme/colors.dart';
+
+import 'package:flowtask/l10n/app_localizations.dart';
 import '../../../services/auth_service.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   final _nameController = TextEditingController();
@@ -50,13 +54,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text, 
         _passController.text,
       );
+      ref.read(userProvider.notifier).state = LocalUser(email: _emailController.text);
       if (mounted) {
         context.go('/');
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed: ${e.toString()}')),
+          SnackBar(content: Text('${AppLocalizations.of(context)!.registerFailed}: ${e.toString()}')),
         );
       }
     } finally {
@@ -77,6 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -94,8 +100,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 10),
-              const Text(
-                'Create Account',
+              Text(
+                AppLocalizations.of(context)!.signUp,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
@@ -104,9 +110,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ).animate().fadeIn().slideX(begin: -0.1, end: 0),
               const SizedBox(height: 8),
-              const Text(
-                'Start your journey to absolute focus.',
-                style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
+              Text(
+                l10n.authSubtitle,
+                style: const TextStyle(fontSize: 16, color: AppColors.textSecondary),
               ).animate().fadeIn(delay: 100.ms),
               
               const SizedBox(height: 48),
@@ -124,11 +130,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _nameController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: 'Full Name',
+                        hintText: l10n.fullName, 
+                        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                         prefixIcon: const Icon(Icons.person_outline, color: AppColors.textMuted),
                         filled: true,
-                        fillColor: AppColors.background,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                        fillColor: Colors.white.withValues(alpha: 0.05),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -137,11 +151,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: const TextStyle(color: Colors.white),
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: 'Email Address',
+                        hintText: AppLocalizations.of(context)!.email,
+                        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                         prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textMuted),
                         filled: true,
-                        fillColor: AppColors.background,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                        fillColor: Colors.white.withValues(alpha: 0.05),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -150,11 +172,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: 'Password',
+                        hintText: AppLocalizations.of(context)!.password,
+                        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
                         prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textMuted),
                         filled: true,
-                        fillColor: AppColors.background,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                        fillColor: Colors.white.withValues(alpha: 0.05),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -168,20 +198,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: _isLoading 
                         ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                        : const Text('CREATE ACCOUNT', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+                        : Text(AppLocalizations.of(context)!.signUp.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
                     ),
                   ],
                 ),
               ).animate().slideY(begin: 0.1, end: 0, delay: 200.ms).fadeIn(),
               
               const SizedBox(height: 24),
-              GestureDetector(
-                onTap: () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy'),
-                child: const Text(
-                  'By registering, you agree to our Terms of Service and Privacy Policy.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline),
-                ),
+              Text(
+                l10n.termsAgreement,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
               ).animate().fadeIn(delay: 400.ms),
             ],
           ),
@@ -190,4 +217,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-

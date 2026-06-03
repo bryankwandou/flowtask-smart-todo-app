@@ -1,16 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:intl/intl.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flowtask/core/theme/colors.dart';
-import '../../../widgets/shimmer_loading.dart';
-import '../providers/task_provider.dart';
-import '../../../widgets/sheets/task_creation_sheet.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+import '../../../widgets/sheets/task_creation_sheet.dart';
+import '../../../widgets/shimmer_loading.dart';
 import '../../analytics/providers/analytics_provider.dart';
 import '../models/task_model.dart';
+import '../providers/task_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +46,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final allTasks = ref.watch(taskProvider);
-    final isLoading = allTasks.isEmpty && !ref.watch(taskProvider.notifier).mounted; // Improved loading heuristic
+    final isLoading = allTasks.isEmpty && !ref.watch(taskProvider.notifier).mounted; 
+    final l10n = AppLocalizations.of(context)!;
 
     // Apply filtering and search
     final tasks = allTasks.where((t) {
@@ -66,7 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 pinned: true,
                 backgroundColor: AppColors.background,
                 flexibleSpace: FlexibleSpaceBar(
-                  title: const Text('FlowTask', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
+                  title: Text(l10n.appTitle, style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
                   centerTitle: false,
                   titlePadding: const EdgeInsets.only(left: 24, bottom: 65),
                   background: Stack(
@@ -103,9 +106,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _buildIQStat('TODAY', '${tasks.where((t) => t.status == 'completed').length}/${allTasks.length}'),
-                                _buildIQStat('FLOW IQ', '${(stats.completionRate * 100).toInt()}%'),
-                                _buildIQStat('STREAK', '${stats.currentStreak}D'),
+                                _buildIQStat(l10n.todayLabel, '${tasks.where((t) => t.status == 'completed').length}/${allTasks.length}'),
+                                _buildIQStat(l10n.flowIQ, '${(stats.completionRate * 100).toInt()}%'),
+                                _buildIQStat(l10n.streakLabel, '${stats.currentStreak}D'),
                               ],
                             );
                           },
@@ -121,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             onChanged: (val) => setState(() => _searchQuery = val.toLowerCase()),
                             style: const TextStyle(color: Colors.white, fontSize: 14),
                             decoration: InputDecoration(
-                              hintText: 'Search your flow...',
+                              hintText: l10n.searchHint,
                               hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
                               prefixIcon: Icon(Icons.search_rounded, color: Colors.white.withValues(alpha: 0.3), size: 18),
                               filled: true,
@@ -139,11 +142,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 16),
                     child: IconButton.filledTonal(
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
+                      onPressed: () async {
+                        await HapticFeedback.lightImpact();
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text('Focus Defense Active: Notifications are optimized for flow.'),
+                            content: Text(l10n.focusDefense),
                             backgroundColor: AppColors.primary,
                             behavior: SnackBarBehavior.floating,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -163,13 +167,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   child: Row(
                     children: [
-                       _buildFilterChip('All', null),
+                       _buildFilterChip(l10n.allFilter, null),
                        const SizedBox(width: 8),
-                       _buildFilterChip('🔥 High', 3),
+                       _buildFilterChip('🔥 ${l10n.highPriority}', 3),
                        const SizedBox(width: 8),
-                       _buildFilterChip('⚡ Med', 2),
+                       _buildFilterChip('⚡ ${l10n.medPriority}', 2),
                        const SizedBox(width: 8),
-                       _buildFilterChip('🍀 Low', 1),
+                       _buildFilterChip('🍀 ${l10n.lowPriority}', 1),
                     ],
                   ),
                 ),
@@ -197,12 +201,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                          .shimmer(duration: 3.seconds, color: Colors.white10),
                         const SizedBox(height: 32),
                         Text(
-                          _searchQuery.isEmpty ? 'The Flow Is Clear' : 'No Resonant Tasks',
+                          _searchQuery.isEmpty ? l10n.emptyState : l10n.noMatchingTasks,
                           style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: -0.5)
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          _searchQuery.isEmpty ? 'Tap the pulse button to capture your next goal.' : 'Try adjusting your frequency filters.',
+                          _searchQuery.isEmpty ? l10n.captureGoal : l10n.adjustFilters,
                           textAlign: TextAlign.center,
                           style: const TextStyle(color: AppColors.textMuted)
                         ),
@@ -217,7 +221,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final Task task = tasks[index];
-                        return _TaskCard(task: task, onCompleted: _onTaskCompleted)
+                        return _TaskCard(task: task, onCompleted: _onTaskCompleted, l10n: l10n)
                             .animate(delay: (index * 100).ms)
                             .fadeIn(duration: 500.ms)
                             .slideX(begin: 0.1, end: 0, curve: Curves.easeOutCubic);
@@ -255,7 +259,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return ChoiceChip(
       label: Text(label, style: TextStyle(fontSize: 12, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
       selected: isSelected,
-      onSelected: (val) => setState(() => _filterPriority = val ? priority : null),
+      onSelected: (val) async {
+        await HapticFeedback.lightImpact();
+        setState(() => _filterPriority = val ? priority : null);
+      },
       selectedColor: AppColors.primary.withValues(alpha: 0.2),
       backgroundColor: Colors.white.withValues(alpha: 0.05),
       labelStyle: TextStyle(color: isSelected ? AppColors.primaryLight : Colors.white70),
@@ -294,9 +301,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _TaskCard extends ConsumerWidget {
+  const _TaskCard({required this.task, required this.onCompleted, required this.l10n});
   final Task task;
   final VoidCallback onCompleted;
-  const _TaskCard({required this.task, required this.onCompleted});
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -316,12 +324,15 @@ class _TaskCard extends ConsumerWidget {
           ),
           child: const Icon(Icons.delete_sweep_rounded, color: Colors.white, size: 28),
         ),
-        onDismissed: (_) {
-          HapticFeedback.lightImpact();
-          ref.read(taskProvider.notifier).deleteTask(task.id);
+        onDismissed: (_) async {
+          await HapticFeedback.lightImpact();
+          await ref.read(taskProvider.notifier).deleteTask(task.id);
         },
         child: GestureDetector(
-          onTap: () => context.push('/task-detail', extra: task),
+          onTap: () async {
+            await HapticFeedback.lightImpact();
+            if (context.mounted) await context.push('/task-detail', extra: task);
+          },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeOutCubic,
@@ -344,12 +355,12 @@ class _TaskCard extends ConsumerWidget {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
+                  onTap: () async {
+                    await HapticFeedback.mediumImpact();
                     if (!isCompleted) {
                       onCompleted();
                     }
-                    ref.read(taskProvider.notifier).toggleTaskStatus(task.id);
+                    await ref.read(taskProvider.notifier).toggleTaskStatus(task.id);
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
@@ -393,7 +404,7 @@ class _TaskCard extends ConsumerWidget {
                             style: const TextStyle(color: AppColors.textMuted, fontSize: 12, fontWeight: FontWeight.w500)
                           ),
                           const SizedBox(width: 16),
-                          _PriorityBadge(priority: task.priority),
+                          _PriorityBadge(priority: task.priority, l10n: l10n),
                         ],
                       ),
                     ],
@@ -411,8 +422,9 @@ class _TaskCard extends ConsumerWidget {
 }
 
 class _PriorityBadge extends StatelessWidget {
+  const _PriorityBadge({required this.priority, required this.l10n});
   final int priority;
-  const _PriorityBadge({required this.priority});
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -420,13 +432,13 @@ class _PriorityBadge extends StatelessWidget {
     String label;
     if (priority == 3) {
       color = AppColors.error;
-      label = 'CRITICAL';
+      label = l10n.highPriority.toUpperCase();
     } else if (priority == 2) {
       color = AppColors.warning;
-      label = 'BALANCED';
+      label = l10n.medPriority.toUpperCase();
     } else {
       color = AppColors.secondary;
-      label = 'ROUTINE';
+      label = l10n.lowPriority.toUpperCase();
     }
 
     return Container(
@@ -443,5 +455,3 @@ class _PriorityBadge extends StatelessWidget {
     );
   }
 }
-
-

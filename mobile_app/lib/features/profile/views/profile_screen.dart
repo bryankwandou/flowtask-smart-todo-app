@@ -1,34 +1,36 @@
+import 'package:flowtask/core/theme/app_theme.dart';
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../auth/providers/auth_provider.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flowtask/core/theme/colors.dart';
 import '../../../core/providers/settings_provider.dart';
-import 'package:flowtask/core/theme/app_theme.dart';
+import '../../auth/providers/auth_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider).value;
+    final user = ref.watch(userProvider);
     final settings = ref.watch(settingsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          const SliverAppBar.large(
+          SliverAppBar.large(
             expandedHeight: 150,
             backgroundColor: AppColors.background,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Account', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
+              title: Text(l10n.profileTitle, style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5)),
               centerTitle: false,
-              titlePadding: EdgeInsets.only(left: 20, bottom: 20),
+              titlePadding: const EdgeInsets.only(left: 20, bottom: 20),
             ),
           ),
           SliverToBoxAdapter(
@@ -71,15 +73,15 @@ class ProfileScreen extends ConsumerWidget {
                               ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
                               const SizedBox(height: 20),
                               Text(
-                                user?.displayName ?? 'Productivity Specialist',
+                                user?.email.split('@')[0].toUpperCase() ?? 'PRODUCTIVITY SPECIALIST',
                                 style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                               Text(
-                                user?.email ?? 'premium@flowtask.app',
+                                user?.email ?? 'FLOWTASK USER',
                                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                               ),
                               const SizedBox(height: 24),
-                              _buildProBadge(context, settings.isFounderPass),
+                              _buildProBadge(context, settings.isFounderPass, l10n),
                             ],
                           ),
                         ),
@@ -89,16 +91,16 @@ class ProfileScreen extends ConsumerWidget {
 
                   const SizedBox(height: 40),
                   
-                  _buildSection('Settings'),
+                  _buildSection(l10n.settings),
                   _buildOptionTile(
                     Icons.color_lens_outlined, 
-                    'Theme Palette', 
+                    l10n.theme, 
                     settings.palette.name.toUpperCase(), 
                     () => _showThemePicker(context, ref)
                   ),
                   _buildOptionTile(
                     Icons.language_rounded, 
-                    'App Language', 
+                    l10n.language, 
                     settings.locale.languageCode == 'en' ? 'English' : 'Indonesian', 
                     () => _showLanguagePicker(context, ref)
                   ),
@@ -106,28 +108,22 @@ class ProfileScreen extends ConsumerWidget {
                     Icons.notifications_none_rounded, 
                     'Notifications', 
                     'Schedule, alerts & sounds', 
-                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/docs')
+                    () => context.push('/notification-settings')
+                  ),
+                  _buildOptionTile(
+                    Icons.info_outline_rounded, 
+                    'About FlowTask', 
+                    'Version, mission & architecture', 
+                    () => context.push('/about')
                   ),
 
                   const SizedBox(height: 32),
                   // Policy & Safety Section
-                  _buildSection('Safety & Legal'),
-                  _buildOptionTile(
-                    Icons.policy_outlined, 
-                    'Privacy Policy', 
-                    'Review our data handling practices', 
-                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/privacy')
-                  ),
-                  _buildOptionTile(
-                    Icons.gavel_rounded, 
-                    'Terms of Service', 
-                    'Acceptable usage and legal terms', 
-                    () => _launchURL(context, 'https://flowtask-smart-todo-app.vercel.app/terms')
-                  ),
+                  _buildSection('Safety & Local Control'),
                   _buildOptionTile(
                     Icons.security_rounded, 
-                    'Security & Data Deletion', 
-                    'Manage your account and purge data', 
+                    'Data Security', 
+                    'Manage your local encryption & purge', 
                     () => context.push('/privacy-settings')
                   ),
 
@@ -138,6 +134,7 @@ class ProfileScreen extends ConsumerWidget {
                     onPressed: () async {
                       final authRepository = ref.read(authRepositoryProvider);
                       await authRepository.signOut();
+                      ref.read(userProvider.notifier).state = null;
                       if (context.mounted) context.go('/login');
                     },
                     icon: const Icon(Icons.logout_rounded),
@@ -172,16 +169,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _launchURL(BuildContext context, String url) async {
-    final Uri uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open $url'))
-        );
-      }
-    }
-  }
+
 
   Widget _buildSection(String title) {
     return Align(
@@ -218,7 +206,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildProBadge(BuildContext context, bool isPremium) {
+  Widget _buildProBadge(BuildContext context, bool isPremium, AppLocalizations l10n) {
     if (!isPremium) {
       return ElevatedButton.icon(
         onPressed: () => context.push('/paywall'),
@@ -229,7 +217,7 @@ class ProfileScreen extends ConsumerWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         icon: const Icon(Icons.bolt_rounded, size: 18),
-        label: const Text('UPGRADE TO PRO', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
+        label: Text(l10n.upgradePro.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13)),
       );
     }
 
@@ -320,7 +308,7 @@ class ProfileScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text('Purge Account?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: const Text(
-          'This action is irreversible. All your tasks, productivity IQ reports, and sync data will be permanently deleted from our servers in compliance with Google Play Store data safety policies.',
+          'This action is irreversible. All your local data, tasks, and productivity reports will be permanently deleted from this device.',
           style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
@@ -331,9 +319,7 @@ class ProfileScreen extends ConsumerWidget {
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
-              // Redirect to privacy settings where the final purge button lives
-              // This multi-step process prevents accidental deletion rejections
-              GoRouter.of(context).push('/privacy-settings');
+              await GoRouter.of(context).push('/privacy-settings');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
@@ -347,5 +333,3 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 }
-
-

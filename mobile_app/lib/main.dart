@@ -1,38 +1,38 @@
+import 'dart:ui';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flowtask/core/theme/app_theme.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flowtask/core/theme/app_theme.dart';
-import 'widgets/main_nav.dart';
-import 'widgets/splash_screen.dart';
-import 'features/onboarding/views/onboarding_screen.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+
+import 'core/providers/settings_provider.dart';
+import 'features/analytics/views/analytics_screen.dart';
 import 'features/auth/views/login_screen.dart';
 import 'features/auth/views/register_screen.dart';
-import 'features/tasks/views/task_detail_screen.dart';
-import 'features/profile/views/paywall_screen.dart';
-import 'features/analytics/views/analytics_screen.dart';
-import 'features/tasks/models/task_model.dart';
-import 'services/auth_service.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:flowtask/core/theme/colors.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'features/onboarding/views/onboarding_screen.dart';
 import 'features/onboarding/views/permission_priming_screen.dart';
 import 'features/profile/views/about_screen.dart';
-import 'features/profile/views/privacy_settings_screen.dart';
 import 'features/profile/views/notification_settings_screen.dart';
-import 'core/providers/settings_provider.dart';
-import 'dart:ui';
+import 'features/profile/views/paywall_screen.dart';
+import 'features/profile/views/privacy_settings_screen.dart';
+import 'features/tasks/models/task_model.dart';
+import 'features/tasks/views/task_detail_screen.dart';
+import 'services/auth_service.dart';
+import 'widgets/main_nav.dart';
+import 'widgets/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Hardened Crash Resilience for 18th Submission
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
-    // Hardened Error Logging: Ensure no PII is leaked in release mode
-    debugPrint('FlowTask Production Error: ${details.exception}');
+    debugPrint('FlowTask Error: ${details.exception}');
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -40,14 +40,12 @@ void main() async {
     return true;
   };
 
-  // Critical Firebase Initialization with Rejection-Proof Readiness
-  await Firebase.initializeApp();
 
   // Initialize Timezone
   tz.initializeTimeZones();
 
   // Initialize Notifications
-  AwesomeNotifications().initialize(
+  await AwesomeNotifications().initialize(
     null, // default icon
     [
       NotificationChannel(
@@ -196,6 +194,7 @@ class FlowTaskApp extends ConsumerWidget {
       darkTheme: AppTheme.getTheme(settings.palette),
       locale: settings.locale,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

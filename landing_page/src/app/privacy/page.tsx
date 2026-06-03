@@ -35,61 +35,59 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-bold text-white mt-12 mb-4">2. Data Safety (Google Play Compliance)</h2>
             <div className="bg-emerald-950/20 border border-emerald-900/30 rounded-2xl p-6 mb-6">
               <ul className="list-disc pl-6 space-y-2 text-slate-300">
-                <li><strong>Data Collection:</strong> We collect minimal personal data (Email) and anonymized usage patterns.</li>
-                <li><strong>Data Usage:</strong> Your data is used strictly for authentication and productivity synchronization.</li>
-                <li><strong>Data Deletion:</strong> We provide a self-service way to permanently and instantly delete your account and all associated data within the app.</li>
+                <li><strong>Zero Data Collection:</strong> We do not collect or transmit any personal data or task content to external servers.</li>
+                <li><strong>Local-Only Storage:</strong> Your productivity data is stored exclusively on your device.</li>
+                <li><strong>Data Deletion:</strong> You have full control to purge all local data instantly within the application.</li>
               </ul>
             </div>
 
-            <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Data We Collect</h2>
+            <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. Data We Process</h2>
             <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 mb-6">
-              <h3 className="text-lg font-semibold text-indigo-400 mb-3">Directly Provided Data:</h3>
+              <h3 className="text-lg font-semibold text-indigo-400 mb-3">On-Device Data:</h3>
               <ul className="list-disc pl-6 space-y-2 text-slate-300">
-                <li><strong>Account Information:</strong> Email address, display name, and unique user ID provided via Firebase Authentication.</li>
-                <li><strong>Task Content:</strong> Titles, descriptions, priorities, and deadlines of tasks you create.</li>
-                <li><strong>Usage Data:</strong> Focus timer durations, completion streaks, and productivity statistics.</li>
+                <li><strong>Local Profile:</strong> Email address used for local identification (stored only on-device).</li>
+                <li><strong>Task Content:</strong> Titles, descriptions, priorities, and deadlines stored in the local database.</li>
+                <li><strong>Productivity Metrics:</strong> Focus timer durations, completion streaks, and statistics processed locally.</li>
               </ul>
             </div>
             
             <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-indigo-400 mb-3">Automatically Collected Data (via Firebase SDKs):</h3>
+              <h3 className="text-lg font-semibold text-indigo-400 mb-3">System Data (On-Device Only):</h3>
               <ul className="list-disc pl-6 space-y-2 text-slate-300">
-                <li><strong>Device Information:</strong> Model, OS version, application version, and unique device identifiers.</li>
-                <li><strong>Crash Reports:</strong> Anonymized data regarding application crashes via Firebase Crashlytics.</li>
-                <li><strong>Analytics:</strong> Aggregated in-app navigation and feature usage patterns via Firebase Analytics.</li>
+                <li><strong>Device State:</strong> Application settings and theme preferences.</li>
+                <li><strong>Notifications:</strong> Locally scheduled task reminders.</li>
               </ul>
             </div>
 
             <h2 className="text-2xl font-bold text-white mt-12 mb-4">3. How We Use Your Data</h2>
             <p className="text-slate-300 leading-relaxed">
-              We use the collected data for various purposes, including:
+              All data processing happens locally on your hardware to:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-slate-300 mt-4">
-              <li>Providing and maintaining the FlowTask service.</li>
-              <li>Generating personalized productivity insights and behavioral analytics.</li>
-              <li>Processing notifications and intelligent reminders.</li>
-              <li>Monitoring app stability and optimizing performance.</li>
-              <li>Detecting and preventing unauthorized access or security breaches.</li>
+              <li>Manage your personal task list.</li>
+              <li>Generate productivity insights and behavioral analytics.</li>
+              <li>Trigger local notifications and reminders.</li>
+              <li>Ensure application stability and performance.</li>
             </ul>
 
             <h2 className="text-2xl font-bold text-white mt-12 mb-4">4. Data Safety & Infrastructure</h2>
             <p className="text-slate-300 leading-relaxed italic border-l-4 border-indigo-600 pl-4 mb-6">
-              FlowTask utilizes Google Firebase as its primary backend infrastructure.
+              FlowTask is a 100% offline-first application.
             </p>
             <p className="text-slate-300 leading-relaxed">
-              Your data is stored securely in **Cloud Firestore** and synchronized across your devices. 
-              Transmission of data is strictly encrypted via HTTPS/TLS. We do not sell your personal information to third-party advertisers.
+              Your data never leaves your device. We do not use cloud databases, synchronization services, or external analytics SDKs. 
+              Your privacy is guaranteed by the physical isolation of your data from our servers.
             </p>
 
-            <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Your Account Management & Deletion</h2>
+            <h2 className="text-2xl font-bold text-white mt-12 mb-4">5. Data Management & Purging</h2>
             <p className="text-slate-300 leading-relaxed">
-              We value your control over your data. You may update your profile information directly within the app.
+              Since we do not store your data on our servers, you have absolute control over your information.
             </p>
             <div className="bg-amber-950/20 border border-amber-900/30 rounded-2xl p-6 mt-6">
-              <h3 className="text-lg font-semibold text-amber-500 mb-2">Account Deletion:</h3>
+              <h3 className="text-lg font-semibold text-amber-500 mb-2">Wiping Local Data:</h3>
               <p className="text-slate-300 leading-relaxed">
-                You can delete your account and all associated data (tasks, analytics, and metadata) at any time via the **Settings &gt; Delete Account** option in the app. 
-                Upon clicking "Delete Account", your Firestore data is purged immediately, and your authentication record is removed.
+                You can delete all local data, including tasks and history, at any time via the **Settings &gt; Delete Account / Wipe Data** option. 
+                Uninstalling the application will also permanently remove all data stored by FlowTask on your device.
               </p>
             </div>
 

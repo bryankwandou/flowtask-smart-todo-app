@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flowtask/core/theme/colors.dart';
+import 'package:flowtask/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flowtask/core/theme/colors.dart';
+
 import '../providers/analytics_provider.dart';
 
 class AnalyticsScreen extends ConsumerWidget {
@@ -11,13 +13,14 @@ class AnalyticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(analyticsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          const SliverAppBar.medium(
-            title: Text('Productivity IQ', style: TextStyle(fontWeight: FontWeight.bold)),
+          SliverAppBar.medium(
+            title: Text(l10n.productivityIQ, style: const TextStyle(fontWeight: FontWeight.bold)),
             centerTitle: false,
           ),
           SliverToBoxAdapter(
@@ -27,21 +30,20 @@ class AnalyticsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12),
-                  // Intelligence Score Bar
-                  _buildIQHeader(stats.currentStreak),
+                  _buildIQHeader(stats.currentStreak, l10n),
                   const SizedBox(height: 32),
 
-                  _buildSectionTitle('Weekly Performance'),
+                  _buildSectionTitle(l10n.weeklyPerformance),
                   const SizedBox(height: 16),
                   _buildWeeklyChart(stats.weeklyVelocity),
                   
                   const SizedBox(height: 32),
-                  _buildSectionTitle('Cognitive Focus Patterns'),
+                  _buildSectionTitle(l10n.cognitivePatterns),
                   const SizedBox(height: 16),
-                  _buildPatternsGrid(stats),
+                  _buildPatternsGrid(stats, l10n),
                   
                   const SizedBox(height: 32),
-                  _buildProductivityInsightCard(stats.peakHour),
+                  _buildProductivityInsightCard(stats.peakHour, l10n),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -52,7 +54,7 @@ class AnalyticsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildIQHeader(int streak) {
+  Widget _buildIQHeader(int streak, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -72,9 +74,9 @@ class AnalyticsScreen extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Current Streak', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
+              Text(l10n.streak, style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
-              Text('${streak.toString().padLeft(2, '0')} Days', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
+              Text('${streak.toString().padLeft(2, '0')} ${l10n.days}', style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
             ],
           ),
           Container(
@@ -143,7 +145,7 @@ class AnalyticsScreen extends ConsumerWidget {
     ).animate().fadeIn(delay: 200.ms, duration: 800.ms);
   }
 
-  Widget _buildPatternsGrid(dynamic stats) {
+  Widget _buildPatternsGrid(dynamic stats, AppLocalizations l10n) {
     return Column(
       children: [
         GridView.count(
@@ -154,10 +156,10 @@ class AnalyticsScreen extends ConsumerWidget {
           mainAxisSpacing: 16,
           childAspectRatio: 1.4,
           children: [
-            _buildStatCard('Total Tasks', stats.totalTasks.toString(), Icons.check_circle_outline, AppColors.primary),
-            _buildStatCard('Current Streak', '${stats.currentStreak} Days', Icons.local_fire_department_rounded, AppColors.warning),
-            _buildStatCard('Completion', '${(stats.completionRate * 100).toInt()}%', Icons.pie_chart_outline_rounded, AppColors.secondary),
-            _buildStatCard('Peak Hour', stats.peakHour, Icons.access_time_rounded, AppColors.primaryLight),
+            _buildStatCard(l10n.totalTasks, stats.totalTasks.toString(), Icons.check_circle_outline, AppColors.primary),
+            _buildStatCard(l10n.streak, '${stats.currentStreak} ${l10n.days}', Icons.local_fire_department_rounded, AppColors.warning),
+            _buildStatCard(l10n.completion, '${(stats.completionRate * 100).toInt()}%', Icons.pie_chart_outline_rounded, AppColors.secondary),
+            _buildStatCard(l10n.peakHour, stats.peakHour, Icons.access_time_rounded, AppColors.primaryLight),
           ],
         ).animate().fadeIn(delay: 400.ms),
 
@@ -186,7 +188,7 @@ class AnalyticsScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('INTELLIGENCE TIP', style: TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                        Text(l10n.intelligenceTip.toUpperCase(), style: const TextStyle(color: AppColors.primaryLight, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
                         const SizedBox(height: 4),
                         Text(tip, style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.4)),
                       ],
@@ -221,9 +223,7 @@ class AnalyticsScreen extends ConsumerWidget {
     ).animate().shimmer(duration: 2.seconds, color: Colors.white10);
   }
 
-  }
-
-  Widget _buildProductivityInsightCard(String peakHour) {
+  Widget _buildProductivityInsightCard(String peakHour, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -234,16 +234,16 @@ class AnalyticsScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.lightbulb_outline, color: AppColors.secondary),
-              SizedBox(width: 12),
-              Text('Smart Recommendation', style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold)),
+              const Icon(Icons.lightbulb_outline, color: AppColors.secondary),
+              const SizedBox(width: 12),
+              Text(l10n.smartRecommendation, style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold)),
             ],
           ),
           const SizedBox(height: 12),
           Text(
-            'Your productivity typically peaks around $peakHour. Schedule your high-priority "Deep Work" tasks during this window for 30% higher efficiency.',
+            'Your productivity typically peaks around $peakHour. Schedule your high-priority work during this window for maximum efficiency.',
             style: TextStyle(color: AppColors.textPrimary.withValues(alpha: 0.8), height: 1.5),
           ),
         ],
@@ -258,4 +258,3 @@ class AnalyticsScreen extends ConsumerWidget {
     );
   }
 }
-

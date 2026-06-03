@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Task {
   final String id;
   final String title;
@@ -9,6 +7,7 @@ class Task {
   final DateTime deadline;
   final DateTime createdAt;
   final DateTime? completedAt;
+  final String category;
 
   Task({
     required this.id,
@@ -19,7 +18,22 @@ class Task {
     required this.deadline,
     required this.createdAt,
     this.completedAt,
+    this.category = 'General',
   });
+
+  factory Task.fromMap(Map<String, dynamic> data) {
+    return Task(
+      id: data['id'] ?? '',
+      title: data['title'] ?? '',
+      description: data['description'] ?? '',
+      priority: data['priority'] ?? 1,
+      status: data['status'] ?? 'pending',
+      deadline: DateTime.parse(data['deadline']),
+      createdAt: DateTime.parse(data['created_at']),
+      completedAt: data['completed_at'] != null ? DateTime.parse(data['completed_at']) : null,
+      category: data['category'] ?? 'General',
+    );
+  }
 
   Task copyWith({
     String? id,
@@ -30,6 +44,7 @@ class Task {
     DateTime? deadline,
     DateTime? createdAt,
     DateTime? completedAt,
+    String? category,
   }) {
     return Task(
       id: id ?? this.id,
@@ -40,32 +55,21 @@ class Task {
       deadline: deadline ?? this.deadline,
       createdAt: createdAt ?? this.createdAt,
       completedAt: completedAt ?? this.completedAt,
+      category: category ?? this.category,
     );
   }
 
-  factory Task.fromFirestore(Map<String, dynamic> data, String id) {
-    return Task(
-      id: id,
-      title: data['title'] ?? '',
-      description: data['description'] ?? '',
-      priority: data['priority'] ?? 1,
-      status: data['status'] ?? 'pending',
-      deadline: (data['deadline'] as Timestamp).toDate(),
-      createdAt: (data['created_at'] as Timestamp).toDate(),
-      completedAt: (data['completed_at'] as Timestamp?)?.toDate(),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'priority': priority,
       'status': status,
-      'deadline': Timestamp.fromDate(deadline),
-      'created_at': Timestamp.fromDate(createdAt),
-      'completed_at': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
+      'deadline': deadline.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'completed_at': completedAt?.toIso8601String(),
+      'category': category,
     };
   }
 }
-

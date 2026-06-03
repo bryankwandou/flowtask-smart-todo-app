@@ -21,9 +21,9 @@ class AppColors {
   static const Color surfaceLight = Color(0xFF1E293B); // Slate 800
   
   // Text Colors
-  static const Color textPrimary = Color(0xFFF8FAFC); // Slate 50
-  static const Color textSecondary = Color(0xFF94A3B8); // Slate 400
-  static const Color textMuted = Color(0xFF64748B); // Slate 500
+  static const Color textPrimary = Color(0xFFFFFFFF); // Pure White
+  static const Color textSecondary = Color(0xFFE2E8F0); // Slate 200 (Brighter)
+  static const Color textMuted = Color(0xFFAFB9C8); // Custom Lighter Grey (Improved Contrast)
   
   // Custom Gradients for "Premium" UI
   static const LinearGradient primaryGradient = LinearGradient(

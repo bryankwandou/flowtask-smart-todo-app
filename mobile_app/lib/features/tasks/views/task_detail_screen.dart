@@ -1,16 +1,17 @@
+import 'package:confetti/confetti.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:confetti/confetti.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flowtask/core/theme/colors.dart';
+
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
 
 class TaskDetailScreen extends ConsumerStatefulWidget {
-  final Task task;
   const TaskDetailScreen({super.key, required this.task});
+  final Task task;
 
   @override
   ConsumerState<TaskDetailScreen> createState() => _TaskDetailScreenState();

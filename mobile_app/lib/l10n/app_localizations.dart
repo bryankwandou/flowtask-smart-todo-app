@@ -193,6 +193,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @streak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get streak;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get days;
+
+  /// No description provided for @totalTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Tasks'**
+  String get totalTasks;
+
+  /// No description provided for @completion.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion'**
+  String get completion;
+
+  /// No description provided for @peakHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Peak Hour'**
+  String get peakHour;
+
+  /// No description provided for @weeklyPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Performance'**
+  String get weeklyPerformance;
+
+  /// No description provided for @productivityIQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Productivity IQ'**
+  String get productivityIQ;
+
+  /// No description provided for @cognitivePatterns.
+  ///
+  /// In en, this message translates to:
+  /// **'Cognitive Focus Patterns'**
+  String get cognitivePatterns;
+
+  /// No description provided for @intelligenceTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Intelligence Tip'**
+  String get intelligenceTip;
+
+  /// No description provided for @smartRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Recommendation'**
+  String get smartRecommendation;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// No description provided for @securityData.
+  ///
+  /// In en, this message translates to:
+  /// **'Security & Data Deletion'**
+  String get securityData;
+
+  /// No description provided for @newTask.
+  ///
+  /// In en, this message translates to:
+  /// **'New Task'**
+  String get newTask;
+
+  /// No description provided for @taskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What needs to be done?'**
+  String get taskHint;
+
+  /// No description provided for @detailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details (optional)'**
+  String get detailsHint;
+
+  /// No description provided for @priority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get priority;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @continueBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueBtn;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started Free'**
+  String get getStarted;
+
+  /// No description provided for @onboarding1Tag.
+  ///
+  /// In en, this message translates to:
+  /// **'TASK INTELLIGENCE'**
+  String get onboarding1Tag;
+
+  /// No description provided for @onboarding1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tame the Chaos'**
+  String get onboarding1Title;
+
+  /// No description provided for @onboarding1Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize every task in a minimalist space engineered for clarity. No clutter, just progress.'**
+  String get onboarding1Sub;
+
+  /// No description provided for @onboarding2Tag.
+  ///
+  /// In en, this message translates to:
+  /// **'DEEP FOCUS ENGINE'**
+  String get onboarding2Tag;
+
+  /// No description provided for @onboarding2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Find Your Flow'**
+  String get onboarding2Title;
+
+  /// No description provided for @onboarding2Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch precision sessions tied to any task. Eliminate distractions. Enter the zone.'**
+  String get onboarding2Sub;
+
+  /// No description provided for @onboarding3Tag.
+  ///
+  /// In en, this message translates to:
+  /// **'PRODUCTIVITY IQ'**
+  String get onboarding3Tag;
+
+  /// No description provided for @onboarding3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Your Insights'**
+  String get onboarding3Title;
+
+  /// No description provided for @onboarding3Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover your peak performance hours and track streaks—automatically.'**
+  String get onboarding3Sub;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get login;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed'**
+  String get loginFailed;
+
+  /// No description provided for @registerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed'**
+  String get registerFailed;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get forgotPassword;
+
+  /// No description provided for @todayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get todayLabel;
+
+  /// No description provided for @flowIQ.
+  ///
+  /// In en, this message translates to:
+  /// **'FLOW IQ'**
+  String get flowIQ;
+
+  /// No description provided for @streakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'STREAK'**
+  String get streakLabel;
+
+  /// No description provided for @focusDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus Defense Active: Notifications optimized.'**
+  String get focusDefense;
+
+  /// No description provided for @allFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allFilter;
+
+  /// No description provided for @noMatchingTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No Matching Tasks'**
+  String get noMatchingTasks;
+
+  /// No description provided for @captureGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture your next goal below.'**
+  String get captureGoal;
+
+  /// No description provided for @adjustFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your filters.'**
+  String get adjustFilters;
+
+  /// No description provided for @authSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your journey to absolute focus.'**
+  String get authSubtitle;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @termsAgreement.
+  ///
+  /// In en, this message translates to:
+  /// **'By registering, you agree to our Terms of Service and Privacy Policy.'**
+  String get termsAgreement;
 }
 
 class _AppLocalizationsDelegate
@@ -228,4 +528,3 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     'that was used.',
   );
 }
-

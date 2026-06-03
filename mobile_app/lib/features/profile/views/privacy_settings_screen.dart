@@ -1,9 +1,10 @@
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flowtask/core/theme/colors.dart';
-import '../../../services/auth_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../services/auth_service.dart';
 
 class PrivacySettingsScreen extends StatelessWidget {
   const PrivacySettingsScreen({super.key});
@@ -28,7 +29,7 @@ class PrivacySettingsScreen extends StatelessWidget {
             ).animate().fadeIn(),
             const SizedBox(height: 8),
             const Text(
-              'We isolate your task history and focus patterns to your local identity. Data is encrypted and managed via Google Firebase infrastructure.',
+              'Your task history and focus patterns are isolated to your local identity. Data is encrypted and managed exclusively on your device for maximum privacy.',
               style: TextStyle(color: AppColors.textSecondary, height: 1.5),
             ).animate().fadeIn(delay: 200.ms),
             
@@ -58,8 +59,8 @@ class PrivacySettingsScreen extends StatelessWidget {
                   () => _launchURL('https://flowtask-smart-todo-app.vercel.app/privacy'),
                 ),
                 _buildActionTile(
-                  'Data Processing Agreement',
-                  'Legal terms of our backend storage.',
+                  'Data Storage Agreement',
+                  'Terms of your local secure storage.',
                   Icons.description_outlined,
                   () => _showDPASheet(context),
                 ),
@@ -139,7 +140,7 @@ class PrivacySettingsScreen extends StatelessWidget {
             const Text('Your Data Sovereignty', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
             const SizedBox(height: 16),
             const Text(
-              'FlowTask utilizes Google Firebase with end-to-end encryption. Your task history and productivity analytics are linked only to your secure account identity. You can request a manual data export by contacting support@flowtask.app or via the Settings menu in our web portal.',
+              'FlowTask utilizes a local-first architecture with on-device AES-256 encryption. Your task history and productivity analytics are stored only on your physical device. No data is transmitted to external servers. You can wipe all data at any time via the button below.',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.textSecondary, height: 1.5),
             ),
@@ -179,16 +180,16 @@ class PrivacySettingsScreen extends StatelessWidget {
               const Center(child: Icon(Icons.description_outlined, color: AppColors.primary, size: 48)),
               const SizedBox(height: 16),
               const Center(
-                child: Text('Data Processing Agreement', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                child: Text('Local Data Agreement', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
               ),
               const SizedBox(height: 24),
               const Text(
-                'By using FlowTask, you enter into a Data Processing Agreement regarding your personal information and task synchronization content.',
+                'By using FlowTask, you agree to our local data handling policy.',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               const Text(
-                '1. Infrastructure: All data processing is executed on Google Firebase servers located in multi-regional clusters (US/EU/Asia).\n\n2. Security: We leverage Firebase Security Rules to enforce row-level security, ensuring only YOU can read/write your tasks.\n\n3. Deletion: We abide by "Right to be Forgotten" mandates. When you delete your account, we propagate those deletion requests to our Firestore and Auth instances immediately.\n\n4. Analytics: All behavioral analytics are anonymized and used strictly to improve the Productivity IQ algorithm.',
+                '1. Infrastructure: All data is stored locally in an encrypted SQLite database on your device.\n\n2. Security: We leverage industry-standard local encryption to ensure your tasks are protected at rest.\n\n3. Deletion: You have absolute control. When you wipe data or uninstall the app, everything is permanently removed from your device.\n\n4. Analytics: All productivity insights are calculated on-device and never leave your hardware.',
                 style: TextStyle(color: AppColors.textSecondary, height: 1.6),
               ),
               const SizedBox(height: 32),

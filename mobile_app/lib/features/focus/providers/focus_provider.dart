@@ -8,10 +8,6 @@ final focusProvider = StateNotifierProvider<FocusNotifier, FocusModel>((ref) {
 });
 
 class FocusModel {
-  final int totalSeconds;
-  final int remainingSeconds;
-  final FocusState status;
-  final String? currentTaskId;
 
   FocusModel({
     required this.totalSeconds,
@@ -19,6 +15,10 @@ class FocusModel {
     required this.status,
     this.currentTaskId,
   });
+  final int totalSeconds;
+  final int remainingSeconds;
+  final FocusState status;
+  final String? currentTaskId;
 
   FocusModel copyWith({
     int? totalSeconds,
@@ -38,13 +38,13 @@ class FocusModel {
 }
 
 class FocusNotifier extends StateNotifier<FocusModel> {
-  Timer? _timer;
 
   FocusNotifier() : super(FocusModel(
     totalSeconds: 25 * 60,
     remainingSeconds: 25 * 60,
     status: FocusState.initial,
   ));
+  Timer? _timer;
 
   void startFocus({String? taskId, int? durationMinutes}) {
     _timer?.cancel();

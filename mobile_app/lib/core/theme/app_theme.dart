@@ -1,6 +1,6 @@
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flowtask/core/theme/colors.dart';
 
 enum ThemePalette { indigo, emerald, slate }
 
@@ -22,6 +22,11 @@ class AppTheme {
         onError: Colors.white,
       ),
       scaffoldBackgroundColor: AppColors.background,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: colors.primary,
+        selectionColor: colors.primary.withValues(alpha: 0.5),
+        selectionHandleColor: colors.primary,
+      ),
       
       textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.outfit(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.textPrimary, letterSpacing: -1.5),
@@ -36,20 +41,21 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.03),
-        hintStyle: const TextStyle(color: AppColors.textMuted),
+        fillColor: Colors.white.withValues(alpha: 0.15),
+        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        labelStyle: const TextStyle(color: Colors.white),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: colors.primary, width: 1.5),
+          borderSide: BorderSide(color: colors.primary, width: 2.0),
         ),
       ),
 
@@ -97,8 +103,8 @@ class AppTheme {
 }
 
 class _PaletteColors {
+  const _PaletteColors({required this.primary, required this.secondary});
   final Color primary;
   final Color secondary;
-  const _PaletteColors({required this.primary, required this.secondary});
 }
 

@@ -1,11 +1,4 @@
 class ProductivityStats {
-  final int totalTasks;
-  final int completedTasks;
-  final int currentStreak;
-  final double completionRate;
-  final String peakHour;
-  final List<double> weeklyVelocity;
-  final bool isBaseline;
 
   ProductivityStats({
     required this.totalTasks,
@@ -28,5 +21,12 @@ class ProductivityStats {
       isBaseline: true,
     );
   }
+  final int totalTasks;
+  final int completedTasks;
+  final int currentStreak;
+  final double completionRate;
+  final String peakHour;
+  final List<double> weeklyVelocity;
+  final bool isBaseline;
 }
 

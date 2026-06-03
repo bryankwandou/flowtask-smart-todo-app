@@ -1,11 +1,13 @@
+import 'dart:ui';
+
+import 'package:confetti/confetti.dart';
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:confetti/confetti.dart';
-import 'dart:ui';
-import 'package:flowtask/core/theme/colors.dart';
+
 import '../providers/focus_provider.dart';
 
 class FocusTimerScreen extends ConsumerStatefulWidget {
@@ -49,12 +51,12 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
     }
 
     // Timer UI Text
-    String timerText = focus.status == FocusState.initial 
+    final String timerText = focus.status == FocusState.initial 
         ? '${_selectedDurationMinutes.toString().padLeft(2, '0')}:00' 
         : _formatTime(focus.remainingSeconds);
         
     // Calculate progress correctly
-    double currentProgress = focus.status == FocusState.initial ? 1.0 : focus.progress;
+    final double currentProgress = focus.status == FocusState.initial ? 1.0 : focus.progress;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -243,7 +245,7 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
   }
 
   Widget _buildPresetChip(int minutes) {
-    bool isSelected = _selectedDurationMinutes == minutes;
+    final bool isSelected = _selectedDurationMinutes == minutes;
     return ChoiceChip(
       label: Text('$minutes min', style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
       selected: isSelected,
@@ -292,8 +294,8 @@ class _FocusTimerScreenState extends ConsumerState<FocusTimerScreen> with Ticker
   }
 
   String _formatTime(int seconds) {
-    int minutes = seconds ~/ 60;
-    int remainingSeconds = seconds % 60;
+    final int minutes = seconds ~/ 60;
+    final int remainingSeconds = seconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }

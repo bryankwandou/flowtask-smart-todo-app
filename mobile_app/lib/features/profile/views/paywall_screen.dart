@@ -1,9 +1,10 @@
+import 'package:flowtask/core/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flowtask/core/theme/colors.dart';
-import '../../../core/providers/settings_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../core/providers/settings_provider.dart';
 
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
@@ -79,8 +80,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         
                         const SizedBox(height: 60),
                         
-                        const SizedBox(height: 60),
-                        
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(24),
@@ -125,21 +124,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                         
                         const SizedBox(height: 48),
 
-                        // Legal Footer (Mandatory for Store Approval)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () => launchUrl(Uri.parse('https://flowtask-smart-todo-app.vercel.app/privacy')),
-                              child: const Text('Privacy Policy', style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline)),
-                            ),
-                            Container(width: 1, height: 12, color: Colors.white24, margin: const EdgeInsets.symmetric(horizontal: 16)),
-                            GestureDetector(
-                              onTap: () => launchUrl(Uri.parse('https://flowtask-smart-todo-app.vercel.app/terms')),
-                              child: const Text('Terms of Service', style: TextStyle(color: AppColors.textMuted, fontSize: 12, decoration: TextDecoration.underline)),
-                            ),
-                          ],
-                        ),
+                        const SizedBox(height: 60),
                         const SizedBox(height: 60),
                       ],
                     ),

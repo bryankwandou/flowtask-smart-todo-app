@@ -234,14 +234,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           
           // Confetti overlay
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              shouldLoop: false,
-              colors: const [AppColors.primary, AppColors.secondary, Colors.amber, Colors.white],
-              gravity: 0.3,
+          IgnorePointer(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: false,
+                colors: const [AppColors.primary, AppColors.secondary, Colors.amber, Colors.white],
+                gravity: 0.3,
+              ),
             ),
           ),
         ],

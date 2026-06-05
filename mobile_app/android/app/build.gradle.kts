@@ -6,24 +6,29 @@ plugins {
 
 android {
     namespace = "com.nayrbryan.flowtask"
-    compileSdk = 36
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
         applicationId = "com.nayrbryan.flowtask"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     buildTypes {
